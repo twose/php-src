@@ -1,5 +1,5 @@
 /* This is a generated file, edit the .stub.php file instead.
- * Stub hash: 8b6ef365e9635c92ef86adb40b2aba077867f3b2 */
+ * Stub hash: c82b5b9e9bab13ae814ff29994f2822f73431d1c */
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_set_time_limit, 0, 1, _IS_BOOL, 0)
 	ZEND_ARG_TYPE_INFO(0, seconds, IS_LONG, 0)
@@ -2102,6 +2102,8 @@ ZEND_END_ARG_INFO()
 
 #define arginfo_is_array arginfo_boolval
 
+#define arginfo_is_list arginfo_boolval
+
 #define arginfo_is_object arginfo_boolval
 
 #define arginfo_is_scalar arginfo_boolval
@@ -2811,6 +2813,7 @@ ZEND_FUNCTION(is_float);
 ZEND_FUNCTION(is_numeric);
 ZEND_FUNCTION(is_string);
 ZEND_FUNCTION(is_array);
+ZEND_FUNCTION(is_list);
 ZEND_FUNCTION(is_object);
 ZEND_FUNCTION(is_scalar);
 ZEND_FUNCTION(is_callable);
@@ -3462,6 +3465,7 @@ static const zend_function_entry ext_functions[] = {
 	ZEND_FE(is_numeric, arginfo_is_numeric)
 	ZEND_FE(is_string, arginfo_is_string)
 	ZEND_FE(is_array, arginfo_is_array)
+	ZEND_FE(is_list, arginfo_is_list)
 	ZEND_FE(is_object, arginfo_is_object)
 	ZEND_FE(is_scalar, arginfo_is_scalar)
 	ZEND_FE(is_callable, arginfo_is_callable)

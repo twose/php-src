@@ -1443,6 +1443,8 @@ function is_string(mixed $value): bool {}
 
 function is_array(mixed $value): bool {}
 
+function is_list(mixed $value): bool {}
+
 function is_object(mixed $value): bool {}
 
 function is_scalar(mixed $value): bool {}
