@@ -2111,7 +2111,7 @@ char *phar_fix_filepath(char *path, size_t *new_len, int use_cwd) /* {{{ */
 					efree(path);
 					*new_len = 1;
 					efree(newpath);
-					return estrndup(ZEND_STRL("/"));
+					return estrdup("/");
 				}
 				break;
 			case 2:
@@ -2119,7 +2119,7 @@ char *phar_fix_filepath(char *path, size_t *new_len, int use_cwd) /* {{{ */
 					efree(path);
 					*new_len = 1;
 					efree(newpath);
-					return estrndup(ZEND_STRL("/"));
+					return estrdup("/");
 				}
 		}
 		efree(newpath);
@@ -2248,7 +2248,7 @@ int phar_split_fname(const char *filename, size_t filename_len, char **arch, siz
 		*entry = phar_fix_filepath(*entry, entry_len, 0);
 	} else {
 		*entry_len = 1;
-		*entry = estrndup(ZEND_STRL("/"));
+		*entry = estrdup("/");
 	}
 
 #ifdef PHP_WIN32
