@@ -186,14 +186,14 @@ php_stream * php_stream_url_wrap_php(php_stream_wrapper *wrapper, const char *pa
 	int pipe_requested = 0;
 #endif
 
-	if (!strncasecmp(path, "php://", 6)) {
+	if (!strncasecmp(path, ZEND_STRL("php://"))) {
 		path += 6;
 	}
 
-	if (!strncasecmp(path, "temp", 4)) {
+	if (!strncasecmp(path, ZEND_STRL("temp"))) {
 		path += 4;
 		max_memory = PHP_STREAM_MAX_MEM;
-		if (!strncasecmp(path, "/maxmemory:", 11)) {
+		if (!strncasecmp(path, ZEND_STRL("/maxmemory:"))) {
 			path += 11;
 			max_memory = ZEND_STRTOL(path, NULL, 10);
 			if (max_memory < 0) {
@@ -289,7 +289,7 @@ php_stream * php_stream_url_wrap_php(php_stream_wrapper *wrapper, const char *pa
 #ifdef PHP_WIN32
 		pipe_requested = 1;
 #endif
-	} else if (!strncasecmp(path, "fd/", 3)) {
+	} else if (!strncasecmp(path, ZEND_STRL("fd/"))) {
 		const char *start;
 		char       *end;
 		zend_long  fildes_ori;
@@ -336,7 +336,7 @@ php_stream * php_stream_url_wrap_php(php_stream_wrapper *wrapper, const char *pa
 				"[%d]: %s", fildes_ori, errno, strerror(errno));
 			return NULL;
 		}
-	} else if (!strncasecmp(path, "filter/", 7)) {
+	} else if (!strncasecmp(path, ZEND_STRL("filter/"))) {
 		/* Save time/memory when chain isn't specified */
 		if (strchr(mode, 'r') || strchr(mode, '+')) {
 			mode_rw |= PHP_STREAM_FILTER_READ;
@@ -361,9 +361,9 @@ php_stream * php_stream_url_wrap_php(php_stream_wrapper *wrapper, const char *pa
 
 		p = php_strtok_r(pathdup + 1, "/", &token);
 		while (p) {
-			if (!strncasecmp(p, "read=", 5)) {
+			if (!strncasecmp(p, ZEND_STRL("read="))) {
 				php_stream_apply_filter_list(stream, p + 5, 1, 0);
-			} else if (!strncasecmp(p, "write=", 6)) {
+			} else if (!strncasecmp(p, ZEND_STRL("write="))) {
 				php_stream_apply_filter_list(stream, p + 6, 0, 1);
 			} else {
 				php_stream_apply_filter_list(stream, p, mode_rw & PHP_STREAM_FILTER_READ, mode_rw & PHP_STREAM_FILTER_WRITE);

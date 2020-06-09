@@ -1564,7 +1564,7 @@ static sdlPtr get_sdl_from_cache(const char *fn, const char *uri, time_t t, time
 	}
 	close(f);
 
-	if (strncmp(in,"wsdl",4) != 0 || in[4] != WSDL_CACHE_VERSION || in[5] != '\0') {
+	if (strncmp(in,ZEND_STRL("wsdl")) != 0 || in[4] != WSDL_CACHE_VERSION || in[5] != '\0') {
 		unlink(fn);
 		efree(buf);
 		return NULL;
@@ -2128,7 +2128,7 @@ static void add_sdl_to_cache(const char *fn, const char *uri, time_t t, sdlPtr s
 	zend_hash_init(&tmp_bindings, 0, NULL, NULL, 0);
 	zend_hash_init(&tmp_functions, 0, NULL, NULL, 0);
 
-	WSDL_CACHE_PUT_N("wsdl", 4, out);
+	WSDL_CACHE_PUT_N(ZEND_STRL("wsdl"), out);
 	WSDL_CACHE_PUT_1(WSDL_CACHE_VERSION,out);
 	WSDL_CACHE_PUT_1(0,out);
 	WSDL_CACHE_PUT_N(&t, sizeof(t), out);

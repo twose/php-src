@@ -53,7 +53,7 @@ static struct mhash_bc_entry mhash_to_hash[MHASH_NUM_ALGOS] = {
 	{"TIGER", "tiger192,3", 7},
 	{"GOST", "gost", 8},
 	{"CRC32B", "crc32b", 9}, /* used by ethernet (IEEE 802.3), gzip, zip, png, etc */
-	{"HAVAL224", "haval224,3", 10},
+	{"HAVAL224", ZEND_STRL("haval224,3")},
 	{"HAVAL192", "haval192,3", 11},
 	{"HAVAL160", "haval160,3", 12},
 	{"HAVAL128", "haval128,3", 13},

@@ -677,7 +677,7 @@ static int PostHeader(char *RPath, const char *Subject, const char *mailTo, char
 
 	if (!xheaders || !strstr(headers_lc, "date:")) {
 		time_t tNow = time(NULL);
-		zend_string *dt = php_format_date("r", 1, tNow, 1);
+		zend_string *dt = php_format_date(ZEND_STRL("r"), tNow, 1);
 
 		snprintf(header_buffer, MAIL_BUFFER_SIZE, "Date: %s\r\n", ZSTR_VAL(dt));
 		zend_string_free(dt);
@@ -693,7 +693,7 @@ static int PostHeader(char *RPath, const char *Subject, const char *mailTo, char
 	}
 
 	/* Only add the To: field from the $to parameter if isn't in the custom headers */
-	if ((headers_lc && (!strstr(headers_lc, "\r\nto:") && (strncmp(headers_lc, "to:", 3) != 0))) || !headers_lc) {
+	if ((headers_lc && (!strstr(headers_lc, "\r\nto:") && (strncmp(headers_lc, ZEND_STRL("to:")) != 0))) || !headers_lc) {
 		if (!addToHeader(&header_buffer, "To: %s\r\n", mailTo)) {
 			goto PostHeader_outofmem;
 		}

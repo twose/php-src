@@ -1151,7 +1151,7 @@ static zend_string *add_type_string(zend_string *type, zend_string *new_type) {
 	}
 
 	result = zend_string_concat3(
-		ZSTR_VAL(type), ZSTR_LEN(type), "|", 1, ZSTR_VAL(new_type), ZSTR_LEN(new_type));
+		ZSTR_VAL(type), ZSTR_LEN(type), ZEND_STRL("|"), ZSTR_VAL(new_type), ZSTR_LEN(new_type));
 	zend_string_release(type);
 	return result;
 }
@@ -1235,7 +1235,7 @@ zend_string *zend_type_to_string_resolved(zend_type type, zend_class_entry *scop
 	if (type_mask & MAY_BE_NULL) {
 		zend_bool is_union = !str || memchr(ZSTR_VAL(str), '|', ZSTR_LEN(str)) != NULL;
 		if (!is_union) {
-			zend_string *nullable_str = zend_string_concat2("?", 1, ZSTR_VAL(str), ZSTR_LEN(str));
+			zend_string *nullable_str = zend_string_concat2(ZEND_STRL("?"), ZSTR_VAL(str), ZSTR_LEN(str));
 			zend_string_release(str);
 			return nullable_str;
 		}

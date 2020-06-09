@@ -945,9 +945,9 @@ static zend_object *spl_RecursiveIteratorIterator_new_ex(zend_class_entry *class
 
 	if (init_prefix) {
 		smart_str_appendl(&intern->prefix[0], "",    0);
-		smart_str_appendl(&intern->prefix[1], "| ",  2);
-		smart_str_appendl(&intern->prefix[2], "  ",  2);
-		smart_str_appendl(&intern->prefix[3], "|-",  2);
+		smart_str_appendl(&intern->prefix[1], ZEND_STRL("| "));
+		smart_str_appendl(&intern->prefix[2], ZEND_STRL("  "));
+		smart_str_appendl(&intern->prefix[3], ZEND_STRL("|-"));
 		smart_str_appendl(&intern->prefix[4], "\\-", 2);
 		smart_str_appendl(&intern->prefix[5], "",    0);
 

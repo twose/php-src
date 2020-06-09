@@ -405,7 +405,7 @@ PHP_METHOD(Phar, running)
 	fname = (char*)zend_get_executed_filename();
 	fname_len = strlen(fname);
 
-	if (fname_len > 7 && !memcmp(fname, "phar://", 7) && SUCCESS == phar_split_fname(fname, fname_len, &arch, &arch_len, &entry, &entry_len, 2, 0)) {
+	if (fname_len > 7 && !memcmp(fname, ZEND_STRL("phar://")) && SUCCESS == phar_split_fname(fname, fname_len, &arch, &arch_len, &entry, &entry_len, 2, 0)) {
 		efree(entry);
 		if (retphar) {
 			RETVAL_STRINGL(fname, arch_len + 7);
@@ -457,11 +457,11 @@ PHP_METHOD(Phar, mount)
 	}
 #endif
 
-	if (fname_len > 7 && !memcmp(fname, "phar://", 7) && SUCCESS == phar_split_fname(fname, fname_len, &arch, &arch_len, &entry, &entry_len, 2, 0)) {
+	if (fname_len > 7 && !memcmp(fname, ZEND_STRL("phar://")) && SUCCESS == phar_split_fname(fname, fname_len, &arch, &arch_len, &entry, &entry_len, 2, 0)) {
 		efree(entry);
 		entry = NULL;
 
-		if (path_len > 7 && !memcmp(path, "phar://", 7)) {
+		if (path_len > 7 && !memcmp(path, ZEND_STRL("phar://"))) {
 			zend_throw_exception_ex(phar_ce_PharException, 0, "Can only mount internal paths within a phar archive, use a relative path instead of \"%s\"", path);
 			efree(arch);
 			goto finish;
@@ -1270,15 +1270,15 @@ PHP_METHOD(Phar, getSupportedSignatures)
 
 	array_init(return_value);
 
-	add_next_index_stringl(return_value, "MD5", 3);
-	add_next_index_stringl(return_value, "SHA-1", 5);
-	add_next_index_stringl(return_value, "SHA-256", 7);
-	add_next_index_stringl(return_value, "SHA-512", 7);
+	add_next_index_stringl(return_value, ZEND_STRL("MD5"));
+	add_next_index_stringl(return_value, ZEND_STRL("SHA-1"));
+	add_next_index_stringl(return_value, ZEND_STRL("SHA-256"));
+	add_next_index_stringl(return_value, ZEND_STRL("SHA-512"));
 #ifdef PHAR_HAVE_OPENSSL
-	add_next_index_stringl(return_value, "OpenSSL", 7);
+	add_next_index_stringl(return_value, ZEND_STRL("OpenSSL"));
 #else
 	if (zend_hash_str_exists(&module_registry, "openssl", sizeof("openssl")-1)) {
-		add_next_index_stringl(return_value, "OpenSSL", 7);
+		add_next_index_stringl(return_value, ZEND_STRL("OpenSSL"));
 	}
 #endif
 }
@@ -1297,11 +1297,11 @@ PHP_METHOD(Phar, getSupportedCompression)
 	phar_request_initialize();
 
 	if (PHAR_G(has_zlib)) {
-		add_next_index_stringl(return_value, "GZ", 2);
+		add_next_index_stringl(return_value, ZEND_STRL("GZ"));
 	}
 
 	if (PHAR_G(has_bz2)) {
-		add_next_index_stringl(return_value, "BZIP2", 5);
+		add_next_index_stringl(return_value, ZEND_STRL("BZIP2"));
 	}
 }
 /* }}} */
@@ -1338,7 +1338,7 @@ PHP_METHOD(Phar, unlinkArchive)
 	zname = (char*)zend_get_executed_filename();
 	zname_len = strlen(zname);
 
-	if (zname_len > 7 && !memcmp(zname, "phar://", 7) && SUCCESS == phar_split_fname(zname, zname_len, &arch, &arch_len, &entry, &entry_len, 2, 0)) {
+	if (zname_len > 7 && !memcmp(zname, ZEND_STRL("phar://")) && SUCCESS == phar_split_fname(zname, zname_len, &arch, &arch_len, &entry, &entry_len, 2, 0)) {
 		if ((size_t)arch_len == fname_len && !memcmp(arch, fname, arch_len)) {
 			zend_throw_exception_ex(phar_ce_PharException, 0, "phar archive \"%s\" cannot be unlinked from within itself", fname);
 			efree(arch);
@@ -3118,19 +3118,19 @@ PHP_METHOD(Phar, getSignature)
 		add_assoc_stringl(return_value, "hash", phar_obj->archive->signature, phar_obj->archive->sig_len);
 		switch(phar_obj->archive->sig_flags) {
 			case PHAR_SIG_MD5:
-				add_assoc_stringl(return_value, "hash_type", "MD5", 3);
+				add_assoc_stringl(return_value, "hash_type", ZEND_STRL("MD5"));
 				break;
 			case PHAR_SIG_SHA1:
-				add_assoc_stringl(return_value, "hash_type", "SHA-1", 5);
+				add_assoc_stringl(return_value, "hash_type", ZEND_STRL("SHA-1"));
 				break;
 			case PHAR_SIG_SHA256:
-				add_assoc_stringl(return_value, "hash_type", "SHA-256", 7);
+				add_assoc_stringl(return_value, "hash_type", ZEND_STRL("SHA-256"));
 				break;
 			case PHAR_SIG_SHA512:
-				add_assoc_stringl(return_value, "hash_type", "SHA-512", 7);
+				add_assoc_stringl(return_value, "hash_type", ZEND_STRL("SHA-512"));
 				break;
 			case PHAR_SIG_OPENSSL:
-				add_assoc_stringl(return_value, "hash_type", "OpenSSL", 7);
+				add_assoc_stringl(return_value, "hash_type", ZEND_STRL("OpenSSL"));
 				break;
 			default:
 				unknown = strpprintf(0, "Unknown (%u)", phar_obj->archive->sig_flags);
@@ -4504,7 +4504,7 @@ PHP_METHOD(PharFileInfo, __construct)
 		RETURN_THROWS();
 	}
 
-	if (fname_len < 7 || memcmp(fname, "phar://", 7) || phar_split_fname(fname, fname_len, &arch, &arch_len, &entry, &entry_len, 2, 0) == FAILURE) {
+	if (fname_len < 7 || memcmp(fname, ZEND_STRL("phar://")) || phar_split_fname(fname, fname_len, &arch, &arch_len, &entry, &entry_len, 2, 0) == FAILURE) {
 		zend_throw_exception_ex(spl_ce_RuntimeException, 0,
 			"'%s' is not a valid phar archive URL (must have at least phar://filename.phar)", fname);
 		RETURN_THROWS();

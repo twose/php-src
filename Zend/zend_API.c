@@ -3602,7 +3602,7 @@ ZEND_API zend_property_info *zend_declare_typed_property(zend_class_entry *ce, z
 		property_info->name = zend_mangle_property_name(ZSTR_VAL(ce->name), ZSTR_LEN(ce->name), ZSTR_VAL(name), ZSTR_LEN(name), is_persistent_class(ce));
 	} else {
 		ZEND_ASSERT(access_type & ZEND_ACC_PROTECTED);
-		property_info->name = zend_mangle_property_name("*", 1, ZSTR_VAL(name), ZSTR_LEN(name), is_persistent_class(ce));
+		property_info->name = zend_mangle_property_name(ZEND_STRL("*"), ZSTR_VAL(name), ZSTR_LEN(name), is_persistent_class(ce));
 	}
 
 	property_info->name = zend_new_interned_string(property_info->name);
@@ -4289,7 +4289,7 @@ static int get_default_via_ast(zval *default_value_zval, const char *default_val
 	zend_arena *ast_arena;
 
 	zend_string *code = zend_string_concat3(
-		"<?php ", sizeof("<?php ") - 1, default_value, strlen(default_value), ";", 1);
+		"<?php ", sizeof("<?php ") - 1, default_value, strlen(default_value), ZEND_STRL(";"));
 
 	ast = zend_compile_string_to_ast(code, &ast_arena, "");
 	zend_string_release(code);

@@ -1682,7 +1682,7 @@ PHP_METHOD(ArrayObject, serialize)
 	ZVAL_LONG(&flags, (intern->ar_flags & SPL_ARRAY_CLONE_MASK));
 
 	/* storage */
-	smart_str_appendl(&buf, "x:", 2);
+	smart_str_appendl(&buf, ZEND_STRL("x:"));
 	php_var_serialize(&buf, &flags, &var_hash);
 
 	if (!(intern->ar_flags & SPL_ARRAY_IS_SELF)) {
@@ -1691,7 +1691,7 @@ PHP_METHOD(ArrayObject, serialize)
 	}
 
 	/* members */
-	smart_str_appendl(&buf, "m:", 2);
+	smart_str_appendl(&buf, ZEND_STRL("m:"));
 	if (!intern->std.properties) {
 		rebuild_object_properties(&intern->std);
 	}

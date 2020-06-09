@@ -926,7 +926,7 @@ try_again:
 		if (http_version) {
 			char *tmp;
 
-			if (!strncmp(http_version,"1.1", 3)) {
+			if (!strncmp(http_version,ZEND_STRL("1.1"))) {
 				http_1_1 = 1;
 			}
 
@@ -1247,7 +1247,7 @@ try_again:
 		    strncmp(content_type, "application/soap+xml", cmplen) == 0) {
 			content_type_xml = 1;
 /*
-			if (strncmp(http_body, "<?xml", 5)) {
+			if (strncmp(http_body, ZEND_STRL("<?xml"))) {
 				zval *err;
 				MAKE_STD_ZVAL(err);
 				ZVAL_STRINGL(err, http_body, http_body_size, 1);
@@ -1325,7 +1325,7 @@ try_again:
 				while (*s != '\0' && *s < ' ') {
 					s++;
 				}
-				if (strncmp(s, "<?xml", 5)) {
+				if (strncmp(s, ZEND_STRL("<?xml"))) {
 					error = 1;
 				}
 			}

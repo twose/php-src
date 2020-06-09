@@ -360,8 +360,8 @@ static int cli_is_valid_code(char *code, size_t len, zend_string **prompt) /* {{
 				}
 				break;
 			case outside:
-				if ((CG(short_tags) && !strncmp(code+i-1, "<?", 2))
-				||  (i > 3 && !strncmp(code+i-4, "<?php", 5))
+				if ((CG(short_tags) && !strncmp(code+i-1, ZEND_STRL("<?")))
+				||  (i > 3 && !strncmp(code+i-4, ZEND_STRL("<?php")))
 				) {
 					code_type = body;
 				}

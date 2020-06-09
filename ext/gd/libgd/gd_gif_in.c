@@ -155,13 +155,13 @@ gdImagePtr gdImageCreateFromGifCtx(gdIOCtxPtr fd) /* {{{ */
 	if (! ReadOK(fd,buf,6)) {
 		return 0;
 	}
-	if (strncmp((char *)buf,"GIF",3) != 0) {
+	if (strncmp((char *)buf,ZEND_STRL("GIF")) != 0) {
 		return 0;
 	}
 
-	if (memcmp((char *)buf+3, "87a", 3) == 0) {
+	if (memcmp((char *)buf+3, ZEND_STRL("87a")) == 0) {
 		/* GIF87a */
-	} else if (memcmp((char *)buf+3, "89a", 3) == 0) {
+	} else if (memcmp((char *)buf+3, ZEND_STRL("89a")) == 0) {
 		/* GIF89a */
 	} else {
 		return 0;

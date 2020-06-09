@@ -48,7 +48,7 @@ PHAR_FUNC(phar_opendir) /* {{{ */
 		/* we are checking for existence of a file within the relative path.  Chances are good that this is
 		   retrieving something from within the phar archive */
 
-		if (strncasecmp(fname, "phar://", 7)) {
+		if (strncasecmp(fname, ZEND_STRL("phar://"))) {
 			goto skip_phar;
 		}
 		fname_len = strlen(fname);
@@ -122,7 +122,7 @@ PHAR_FUNC(phar_file_get_contents) /* {{{ */
 
 		fname = (char*)zend_get_executed_filename();
 
-		if (strncasecmp(fname, "phar://", 7)) {
+		if (strncasecmp(fname, ZEND_STRL("phar://"))) {
 			goto skip_phar;
 		}
 		fname_len = strlen(fname);
@@ -253,7 +253,7 @@ PHAR_FUNC(phar_readfile) /* {{{ */
 		phar_archive_data *phar;
 		fname = (char*)zend_get_executed_filename();
 
-		if (strncasecmp(fname, "phar://", 7)) {
+		if (strncasecmp(fname, ZEND_STRL("phar://"))) {
 			goto skip_phar;
 		}
 		fname_len = strlen(fname);
@@ -354,7 +354,7 @@ PHAR_FUNC(phar_fopen) /* {{{ */
 		phar_archive_data *phar;
 		fname = (char*)zend_get_executed_filename();
 
-		if (strncasecmp(fname, "phar://", 7)) {
+		if (strncasecmp(fname, ZEND_STRL("phar://"))) {
 			goto skip_phar;
 		}
 		fname_len = strlen(fname);
@@ -601,7 +601,7 @@ static void phar_file_stat(const char *filename, size_t filename_length, int typ
 		/* we are checking for existence of a file within the relative path.  Chances are good that this is
 		   retrieving something from within the phar archive */
 
-		if (strncasecmp(fname, "phar://", 7)) {
+		if (strncasecmp(fname, ZEND_STRL("phar://"))) {
 			goto skip_phar;
 		}
 		fname_len = strlen(fname);
@@ -867,7 +867,7 @@ PHAR_FUNC(phar_is_file) /* {{{ */
 		/* we are checking for existence of a file within the relative path.  Chances are good that this is
 		   retrieving something from within the phar archive */
 
-		if (strncasecmp(fname, "phar://", 7)) {
+		if (strncasecmp(fname, ZEND_STRL("phar://"))) {
 			goto skip_phar;
 		}
 		fname_len = strlen(fname);
@@ -934,7 +934,7 @@ PHAR_FUNC(phar_is_link) /* {{{ */
 		/* we are checking for existence of a file within the relative path.  Chances are good that this is
 		   retrieving something from within the phar archive */
 
-		if (strncasecmp(fname, "phar://", 7)) {
+		if (strncasecmp(fname, ZEND_STRL("phar://"))) {
 			goto skip_phar;
 		}
 		fname_len = strlen(fname);

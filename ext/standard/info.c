@@ -684,7 +684,7 @@ PHPAPI zend_string *php_get_uname(char mode)
 
 		/* Windows "version" 6.2 could be Windows 8/Windows Server 2012, but also Windows 8.1/Windows Server 2012 R2 */
 		if (dwWindowsMajorVersion == 6 && dwWindowsMinorVersion == 2) {
-			if (strncmp(winver, "Windows 8.1", 11) == 0 || strncmp(winver, "Windows Server 2012 R2", 22) == 0) {
+			if (strncmp(winver, ZEND_STRL("Windows 8.1")) == 0 || strncmp(winver, ZEND_STRL("Windows Server 2012 R2")) == 0) {
 				dwWindowsMinorVersion = 3;
 			}
 		}

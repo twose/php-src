@@ -308,7 +308,7 @@ static int php_iconv_output_handler(void **nothing, php_output_context *output_c
 			return FAILURE;
 		}
 
-		if (SG(sapi_headers).mimetype && !strncasecmp(SG(sapi_headers).mimetype, "text/", 5)) {
+		if (SG(sapi_headers).mimetype && !strncasecmp(SG(sapi_headers).mimetype, ZEND_STRL("text/"))) {
 			if ((s = strchr(SG(sapi_headers).mimetype,';')) == NULL){
 				mimetype = SG(sapi_headers).mimetype;
 			} else {

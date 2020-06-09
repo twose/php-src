@@ -107,7 +107,7 @@ PHPDBG_API int phpdbg_is_empty(const char *str) /* {{{ */
 
 PHPDBG_API int phpdbg_is_addr(const char *str) /* {{{ */
 {
-	return str[0] && str[1] && memcmp(str, "0x", 2) == 0;
+	return str[0] && str[1] && memcmp(str, ZEND_STRL("0x")) == 0;
 } /* }}} */
 
 PHPDBG_API int phpdbg_is_class_method(const char *str, size_t len, char **class, char **method) /* {{{ */

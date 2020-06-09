@@ -63,7 +63,7 @@ php_url* phar_parse_url(php_stream_wrapper *wrapper, const char *filename, const
 	char *arch = NULL, *entry = NULL, *error;
 	size_t arch_len, entry_len;
 
-	if (strlen(filename) < 7 || strncasecmp(filename, "phar://", 7)) {
+	if (strlen(filename) < 7 || strncasecmp(filename, ZEND_STRL("phar://"))) {
 		return NULL;
 	}
 	if (mode[0] == 'a') {
@@ -84,7 +84,7 @@ php_url* phar_parse_url(php_stream_wrapper *wrapper, const char *filename, const
 		return NULL;
 	}
 	resource = ecalloc(1, sizeof(php_url));
-	resource->scheme = zend_string_init("phar", 4, 0);
+	resource->scheme = zend_string_init(ZEND_STRL("phar"), 0);
 	resource->host = zend_string_init(arch, arch_len, 0);
 	efree(arch);
 	resource->path = zend_string_init(entry, entry_len, 0);

@@ -179,7 +179,7 @@ int phar_mount_entry(phar_archive_data *phar, char *filename, size_t filename_le
 		return FAILURE;
 	}
 
-	is_phar = (filename_len > 7 && !memcmp(filename, "phar://", 7));
+	is_phar = (filename_len > 7 && !memcmp(filename, ZEND_STRL("phar://")));
 
 	entry.phar = phar;
 	entry.filename = estrndup(path, path_len);
@@ -259,14 +259,14 @@ zend_string *phar_find_in_include_path(char *filename, size_t filename_len, phar
 	fname = (char*)zend_get_executed_filename();
 	fname_len = strlen(fname);
 
-	if (PHAR_G(last_phar) && !memcmp(fname, "phar://", 7) && fname_len - 7 >= PHAR_G(last_phar_name_len) && !memcmp(fname + 7, PHAR_G(last_phar_name), PHAR_G(last_phar_name_len))) {
+	if (PHAR_G(last_phar) && !memcmp(fname, ZEND_STRL("phar://")) && fname_len - 7 >= PHAR_G(last_phar_name_len) && !memcmp(fname + 7, PHAR_G(last_phar_name), PHAR_G(last_phar_name_len))) {
 		arch = estrndup(PHAR_G(last_phar_name), PHAR_G(last_phar_name_len));
 		arch_len = PHAR_G(last_phar_name_len);
 		phar = PHAR_G(last_phar);
 		goto splitted;
 	}
 
-	if (fname_len < 7 || memcmp(fname, "phar://", 7) || SUCCESS != phar_split_fname(fname, strlen(fname), &arch, &arch_len, &entry, &entry_len, 1, 0)) {
+	if (fname_len < 7 || memcmp(fname, ZEND_STRL("phar://")) || SUCCESS != phar_split_fname(fname, strlen(fname), &arch, &arch_len, &entry, &entry_len, 1, 0)) {
 		return phar_save_resolve_path(filename, filename_len);
 	}
 
@@ -310,7 +310,7 @@ splitted:
 	ret = php_resolve_path(filename, filename_len, path);
 	efree(path);
 
-	if (ret && ZSTR_LEN(ret) > 8 && !strncmp(ZSTR_VAL(ret), "phar://", 7)) {
+	if (ret && ZSTR_LEN(ret) > 8 && !strncmp(ZSTR_VAL(ret), ZEND_STRL("phar://"))) {
 		/* found phar:// */
 		if (SUCCESS != phar_split_fname(ZSTR_VAL(ret), ZSTR_LEN(ret), &arch, &arch_len, &entry, &entry_len, 1, 0)) {
 			return ret;

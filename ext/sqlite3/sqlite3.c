@@ -412,9 +412,9 @@ PHP_METHOD(SQLite3, loadExtension)
 	SQLITE3_CHECK_INITIALIZED(db_obj, db_obj->initialised, SQLite3)
 
 #ifdef ZTS
-	if ((strncmp(sapi_module.name, "cgi", 3) != 0) &&
+	if ((strncmp(sapi_module.name, ZEND_STRL("cgi")) != 0) &&
 		(strcmp(sapi_module.name, "cli") != 0) &&
-		(strncmp(sapi_module.name, "embed", 5) != 0)
+		(strncmp(sapi_module.name, ZEND_STRL("embed")) != 0)
 	) {		php_sqlite3_error(db_obj, "Not supported in multithreaded Web servers");
 		RETURN_FALSE;
 	}
@@ -2136,7 +2136,7 @@ static int php_sqlite3_authorizer(void *autharg, int action, const char *arg1, c
 	if (PG(open_basedir) && *PG(open_basedir)) {
 		if (action == SQLITE_ATTACH) {
 			if (memcmp(arg1, ":memory:", sizeof(":memory:")) && *arg1) {
-				if (strncmp(arg1, "file:", 5) == 0) {
+				if (strncmp(arg1, ZEND_STRL("file:")) == 0) {
 					/* starts with "file:" */
 					if (!arg1[5]) {
 						return SQLITE_DENY;

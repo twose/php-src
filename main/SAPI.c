@@ -314,7 +314,7 @@ static inline char *get_default_content_type(uint32_t prefix_len, uint32_t *len)
 		charset_len = sizeof(SAPI_DEFAULT_CHARSET) - 1;
 	}
 
-	if (*charset && strncasecmp(mimetype, "text/", 5) == 0) {
+	if (*charset && strncasecmp(mimetype, ZEND_STRL("text/")) == 0) {
 		char *p;
 
 		*len = prefix_len + mimetype_len + sizeof("; charset=") - 1 + charset_len;
@@ -369,7 +369,7 @@ SAPI_API size_t sapi_apply_default_charset(char **mimetype, size_t len)
 	charset = SG(default_charset) ? SG(default_charset) : SAPI_DEFAULT_CHARSET;
 
 	if (*mimetype != NULL) {
-		if (*charset && strncmp(*mimetype, "text/", 5) == 0 && strstr(*mimetype, "charset=") == NULL) {
+		if (*charset && strncmp(*mimetype, ZEND_STRL("text/")) == 0 && strstr(*mimetype, "charset=") == NULL) {
 			newlen = len + (sizeof(";charset=")-1) + strlen(charset);
 			newtype = emalloc(newlen + 1);
 	 		PHP_STRLCPY(newtype, *mimetype, newlen + 1, len);
@@ -745,7 +745,7 @@ SAPI_API int sapi_header_op(sapi_header_op_enum op, void *arg)
 
 	/* Check the header for a few cases that we have special support for in SAPI */
 	if (header_line_len>=5
-		&& !strncasecmp(header_line, "HTTP/", 5)) {
+		&& !strncasecmp(header_line, ZEND_STRL("HTTP/"))) {
 		/* filter out the response code */
 		sapi_update_response_code(sapi_extract_response_code(header_line));
 		/* sapi_update_response_code doesn't free the status line if the code didn't change */

@@ -120,7 +120,7 @@ static void php_mail_build_headers_elem(smart_str *s, zend_string *key, zval *va
 				return;
 			}
 			smart_str_append(s, key);
-			smart_str_appendl(s, ": ", 2);
+			smart_str_appendl(s, ZEND_STRL(": "));
 			smart_str_appends(s, Z_STRVAL_P(val));
 			smart_str_appendl(s, "\r\n", 2);
 			break;
@@ -468,7 +468,7 @@ PHPAPI int php_mail(const char *to, const char *subject, const char *message, co
 
 
 			time(&curtime);
-			date_str = php_format_date("d-M-Y H:i:s e", 13, curtime, 1);
+			date_str = php_format_date(ZEND_STRL("d-M-Y H:i:s e"), curtime, 1);
 			len = spprintf(&tmp, 0, "[%s] %s%s", date_str->val, logline, PHP_EOL);
 
 			php_mail_log_to_file(mail_log, tmp, len);

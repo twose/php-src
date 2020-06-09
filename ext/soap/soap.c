@@ -4297,28 +4297,28 @@ static void function_to_string(sdlFunctionPtr function, smart_str *buf) /* {{{ *
 				smart_str_appendl(buf, param->encode->details.type_str, strlen(param->encode->details.type_str));
 				smart_str_appendc(buf, ' ');
 			} else {
-				smart_str_appendl(buf, "UNKNOWN ", 8);
+				smart_str_appendl(buf, ZEND_STRL("UNKNOWN "));
 			}
 		} else {
 			i = 0;
-			smart_str_appendl(buf, "list(", 5);
+			smart_str_appendl(buf, ZEND_STRL("list("));
 			ZEND_HASH_FOREACH_PTR(function->responseParameters, param) {
 				if (i > 0) {
-					smart_str_appendl(buf, ", ", 2);
+					smart_str_appendl(buf, ZEND_STRL(", "));
 				}
 				if (param->encode && param->encode->details.type_str) {
 					smart_str_appendl(buf, param->encode->details.type_str, strlen(param->encode->details.type_str));
 				} else {
-					smart_str_appendl(buf, "UNKNOWN", 7);
+					smart_str_appendl(buf, ZEND_STRL("UNKNOWN"));
 				}
-				smart_str_appendl(buf, " $", 2);
+				smart_str_appendl(buf, ZEND_STRL(" $"));
 				smart_str_appendl(buf, param->paramName, strlen(param->paramName));
 				i++;
 			} ZEND_HASH_FOREACH_END();
-			smart_str_appendl(buf, ") ", 2);
+			smart_str_appendl(buf, ZEND_STRL(") "));
 		}
 	} else {
-		smart_str_appendl(buf, "void ", 5);
+		smart_str_appendl(buf, ZEND_STRL("void "));
 	}
 
 	smart_str_appendl(buf, function->functionName, strlen(function->functionName));
@@ -4328,14 +4328,14 @@ static void function_to_string(sdlFunctionPtr function, smart_str *buf) /* {{{ *
 		i = 0;
 		ZEND_HASH_FOREACH_PTR(function->requestParameters, param) {
 			if (i > 0) {
-				smart_str_appendl(buf, ", ", 2);
+				smart_str_appendl(buf, ZEND_STRL(", "));
 			}
 			if (param->encode && param->encode->details.type_str) {
 				smart_str_appendl(buf, param->encode->details.type_str, strlen(param->encode->details.type_str));
 			} else {
-				smart_str_appendl(buf, "UNKNOWN", 7);
+				smart_str_appendl(buf, ZEND_STRL("UNKNOWN"));
 			}
-			smart_str_appendl(buf, " $", 2);
+			smart_str_appendl(buf, ZEND_STRL(" $"));
 			smart_str_appendl(buf, param->paramName, strlen(param->paramName));
 			i++;
 		} ZEND_HASH_FOREACH_END();
@@ -4400,12 +4400,12 @@ static void type_to_string(sdlTypePtr type, smart_str *buf, int level) /* {{{ */
 			smart_str_appendl(buf, type->name, strlen(type->name));
 			break;
 		case XSD_TYPEKIND_LIST:
-			smart_str_appendl(buf, "list ", 5);
+			smart_str_appendl(buf, ZEND_STRL("list "));
 			smart_str_appendl(buf, type->name, strlen(type->name));
 			if (type->elements) {
 				sdlTypePtr item_type;
 
-				smart_str_appendl(buf, " {", 2);
+				smart_str_appendl(buf, ZEND_STRL(" {"));
 				ZEND_HASH_FOREACH_PTR(type->elements, item_type) {
 					smart_str_appendl(buf, item_type->name, strlen(item_type->name));
 				} ZEND_HASH_FOREACH_END();
@@ -4413,13 +4413,13 @@ static void type_to_string(sdlTypePtr type, smart_str *buf, int level) /* {{{ */
 			}
 			break;
 		case XSD_TYPEKIND_UNION:
-			smart_str_appendl(buf, "union ", 6);
+			smart_str_appendl(buf, ZEND_STRL("union "));
 			smart_str_appendl(buf, type->name, strlen(type->name));
 			if (type->elements) {
 				sdlTypePtr item_type;
 				int first = 0;
 
-				smart_str_appendl(buf, " {", 2);
+				smart_str_appendl(buf, ZEND_STRL(" {"));
 				ZEND_HASH_FOREACH_PTR(type->elements, item_type) {
 					if (!first) {
 						smart_str_appendc(buf, ',');
@@ -4478,7 +4478,7 @@ static void type_to_string(sdlTypePtr type, smart_str *buf, int level) /* {{{ */
 						smart_str_appends(buf, elementType->encode->details.type_str);
 						smart_str_appendc(buf, ' ');
 					} else {
-						smart_str_appendl(buf, "anyType ", 8);
+						smart_str_appendl(buf, ZEND_STRL("anyType "));
 					}
 					smart_str_appendl(buf, type->name, strlen(type->name));
 					if (type->attributes &&
@@ -4490,11 +4490,11 @@ static void type_to_string(sdlTypePtr type, smart_str *buf, int level) /* {{{ */
 						smart_str_appends(buf, ext->val);
 						smart_str_appendc(buf, ']');
 					} else {
-						smart_str_appendl(buf, "[]", 2);
+						smart_str_appendl(buf, ZEND_STRL("[]"));
 					}
 				}
 			} else {
-				smart_str_appendl(buf, "struct ", 7);
+				smart_str_appendl(buf, ZEND_STRL("struct "));
 				smart_str_appendl(buf, type->name, strlen(type->name));
 				smart_str_appendc(buf, ' ');
 				smart_str_appendl(buf, "{\n", 2);
@@ -4532,7 +4532,7 @@ static void type_to_string(sdlTypePtr type, smart_str *buf, int level) /* {{{ */
 							smart_str_appends(buf, attr->encode->details.type_str);
 							smart_str_appendc(buf, ' ');
 						} else {
-							smart_str_appendl(buf, "UNKNOWN ", 8);
+							smart_str_appendl(buf, ZEND_STRL("UNKNOWN "));
 						}
 						smart_str_appends(buf, attr->name);
 						smart_str_appendl(buf, ";\n", 2);

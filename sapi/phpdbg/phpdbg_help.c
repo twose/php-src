@@ -303,7 +303,7 @@ PHPDBG_HELP(aliases) /* {{{ */
 	phpdbg_xml("</helpcommands>");
 
 	/* Print out aliases for help as this one comes last, with the added text on how aliases are used */
-	get_command("h", 1, &c, phpdbg_prompt_commands);
+	get_command(ZEND_STRL("h"), &c, phpdbg_prompt_commands);
 	phpdbg_writeln("aliasinfo", "alias=\"%c\" name=\"%s\" tip=\"%s\"", " %c     %-20s  %s\n", c->alias, c->name, c->tip);
 
 	phpdbg_xml("<helpaliases>");

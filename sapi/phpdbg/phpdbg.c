@@ -1280,7 +1280,7 @@ void *phpdbg_realloc_wrapper(void *ptr, size_t size ZEND_FILE_LINE_DC ZEND_FILE_
 
 php_stream *phpdbg_stream_url_wrap_php(php_stream_wrapper *wrapper, const char *path, const char *mode, int options, zend_string **opened_path, php_stream_context *context STREAMS_DC) /* {{{ */
 {
-	if (!strncasecmp(path, "php://", 6)) {
+	if (!strncasecmp(path, ZEND_STRL("php://"))) {
 		path += 6;
 	}
 

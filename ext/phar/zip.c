@@ -1001,7 +1001,7 @@ continue_dir:
 			return ZEND_HASH_APPLY_STOP;
 		}
 
-		if (1 != php_stream_write(p->filefp, "/", 1)) {
+		if (1 != php_stream_write(p->filefp, ZEND_STRL("/"))) {
 			spprintf(p->error, 0, "unable to write filename to local directory entry for directory \"%s\" while creating zip-based phar \"%s\"", entry->filename, entry->phar->fname);
 			return ZEND_HASH_APPLY_STOP;
 		}
@@ -1011,7 +1011,7 @@ continue_dir:
 			return ZEND_HASH_APPLY_STOP;
 		}
 
-		if (1 != php_stream_write(p->centralfp, "/", 1)) {
+		if (1 != php_stream_write(p->centralfp, ZEND_STRL("/"))) {
 			spprintf(p->error, 0, "unable to write filename to central directory entry for directory \"%s\" while creating zip-based phar \"%s\"", entry->filename, entry->phar->fname);
 			return ZEND_HASH_APPLY_STOP;
 		}

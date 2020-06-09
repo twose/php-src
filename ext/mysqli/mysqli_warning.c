@@ -74,7 +74,7 @@ MYSQLI_WARNING *php_get_warnings(MYSQL *mysql)
 	MYSQL_RES		*result;
 	MYSQL_ROW 		row;
 
-	if (mysql_real_query(mysql, "SHOW WARNINGS", 13)) {
+	if (mysql_real_query(mysql, ZEND_STRL("SHOW WARNINGS"))) {
 		return NULL;
 	}
 
@@ -121,7 +121,7 @@ MYSQLI_WARNING * php_get_warnings(MYSQLND_CONN_DATA * mysql)
 	MYSQL_RES		*result;
 	zval			row;
 
-	if (mysql->m->query(mysql, "SHOW WARNINGS", 13)) {
+	if (mysql->m->query(mysql, ZEND_STRL("SHOW WARNINGS"))) {
 		return NULL;
 	}
 

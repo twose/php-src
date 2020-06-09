@@ -1438,7 +1438,7 @@ static int zend_ffi_ctype_name(zend_ffi_ctype_name_buf *buf, const zend_ffi_type
 				name = "char";
 				break;
 			case ZEND_FFI_TYPE_POINTER:
-				if (!zend_ffi_ctype_name_prepend(buf, "*", 1)) {
+				if (!zend_ffi_ctype_name_prepend(buf, ZEND_STRL("*"))) {
 					return 0;
 				}
 				is_ptr = 1;
@@ -1447,13 +1447,13 @@ static int zend_ffi_ctype_name(zend_ffi_ctype_name_buf *buf, const zend_ffi_type
 			case ZEND_FFI_TYPE_FUNC:
 				if (is_ptr) {
 					is_ptr = 0;
-					if (!zend_ffi_ctype_name_prepend(buf, "(", 1)
-					 || !zend_ffi_ctype_name_append(buf, ")", 1)) {
+					if (!zend_ffi_ctype_name_prepend(buf, ZEND_STRL("("))
+					 || !zend_ffi_ctype_name_append(buf, ZEND_STRL(")"))) {
 						return 0;
 					}
 				}
-				if (!zend_ffi_ctype_name_append(buf, "(", 1)
-				 || !zend_ffi_ctype_name_append(buf, ")", 1)) {
+				if (!zend_ffi_ctype_name_append(buf, ZEND_STRL("("))
+				 || !zend_ffi_ctype_name_append(buf, ZEND_STRL(")"))) {
 					return 0;
 				}
 				type = ZEND_FFI_TYPE(type->func.ret_type);
@@ -1461,16 +1461,16 @@ static int zend_ffi_ctype_name(zend_ffi_ctype_name_buf *buf, const zend_ffi_type
 			case ZEND_FFI_TYPE_ARRAY:
 				if (is_ptr) {
 					is_ptr = 0;
-					if (!zend_ffi_ctype_name_prepend(buf, "(", 1)
-					 || !zend_ffi_ctype_name_append(buf, ")", 1)) {
+					if (!zend_ffi_ctype_name_prepend(buf, ZEND_STRL("("))
+					 || !zend_ffi_ctype_name_append(buf, ZEND_STRL(")"))) {
 						return 0;
 					}
 				}
-				if (!zend_ffi_ctype_name_append(buf, "[", 1)) {
+				if (!zend_ffi_ctype_name_append(buf, ZEND_STRL("["))) {
 					return 0;
 				}
 				if (type->attr & ZEND_FFI_ATTR_VLA) {
-					if (!zend_ffi_ctype_name_append(buf, "*", 1)) {
+					if (!zend_ffi_ctype_name_append(buf, ZEND_STRL("*"))) {
 						return 0;
 					}
 				} else if (!(type->attr & ZEND_FFI_ATTR_INCOMPLETE_ARRAY)) {
@@ -1481,7 +1481,7 @@ static int zend_ffi_ctype_name(zend_ffi_ctype_name_buf *buf, const zend_ffi_type
 						return 0;
 					}
 				}
-				if (!zend_ffi_ctype_name_append(buf, "]", 1)) {
+				if (!zend_ffi_ctype_name_append(buf, ZEND_STRL("]"))) {
 					return 0;
 				}
 				type = ZEND_FFI_TYPE(type->array.type);
@@ -1512,7 +1512,7 @@ static int zend_ffi_ctype_name(zend_ffi_ctype_name_buf *buf, const zend_ffi_type
 	}
 
 //	if (buf->start != buf->end && *buf->start != '[') {
-//		if (!zend_ffi_ctype_name_prepend(buf, " ", 1)) {
+//		if (!zend_ffi_ctype_name_prepend(buf, ZEND_STRL(" "))) {
 //			return 0;
 //		}
 //	}
@@ -1609,7 +1609,7 @@ static zend_string *zend_ffi_get_class_name(zend_string *prefix, const zend_ffi_
 		return zend_string_copy(prefix);
 	} else {
 		return zend_string_concat3(
-			ZSTR_VAL(prefix), ZSTR_LEN(prefix), ":", 1, buf.start, buf.end - buf.start);
+			ZSTR_VAL(prefix), ZSTR_LEN(prefix), ZEND_STRL(":"), buf.start, buf.end - buf.start);
 	}
 }
 /* }}} */

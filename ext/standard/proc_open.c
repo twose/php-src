@@ -647,7 +647,7 @@ static int set_proc_descriptor_to_pipe(descriptorspec_item *desc, zend_string *z
 
 	desc->is_pipe = 1;
 
-	if (strncmp(ZSTR_VAL(zmode), "w", 1) != 0) {
+	if (strncmp(ZSTR_VAL(zmode), ZEND_STRL("w")) != 0) {
 		desc->parentend = newpipe[1];
 		desc->childend = newpipe[0];
 		desc->mode_flags = O_WRONLY;

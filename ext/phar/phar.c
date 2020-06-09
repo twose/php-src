@@ -782,7 +782,7 @@ static int phar_parse_pharfile(php_stream *fp, char *fname, size_t fname_len, ch
 		if (-1 == php_stream_seek(fp, -8, SEEK_END)
 		|| (read_len = php_stream_tell(fp)) < 20
 		|| 8 != php_stream_read(fp, sig_buf, 8)
-		|| memcmp(sig_buf+4, "GBMB", 4)) {
+		|| memcmp(sig_buf+4, ZEND_STRL("GBMB"))) {
 			efree(savebuf);
 			php_stream_close(fp);
 			if (error) {
@@ -1324,12 +1324,12 @@ check_file:
 		return FAILURE;
 	}
 
-	if (ext_len > 3 && (z = memchr(ext_str, 'z', ext_len)) && ((ext_str + ext_len) - z >= 2) && !memcmp(z + 1, "ip", 2)) {
+	if (ext_len > 3 && (z = memchr(ext_str, 'z', ext_len)) && ((ext_str + ext_len) - z >= 2) && !memcmp(z + 1, ZEND_STRL("ip"))) {
 		/* assume zip-based phar */
 		return phar_open_or_create_zip(fname, fname_len, alias, alias_len, is_data, options, pphar, error);
 	}
 
-	if (ext_len > 3 && (z = memchr(ext_str, 't', ext_len)) && ((ext_str + ext_len) - z >= 2) && !memcmp(z + 1, "ar", 2)) {
+	if (ext_len > 3 && (z = memchr(ext_str, 't', ext_len)) && ((ext_str + ext_len) - z >= 2) && !memcmp(z + 1, ZEND_STRL("ar"))) {
 		/* assume tar-based phar */
 		return phar_open_or_create_tar(fname, fname_len, alias, alias_len, is_data, options, pphar, error);
 	}
@@ -2111,7 +2111,7 @@ char *phar_fix_filepath(char *path, size_t *new_len, int use_cwd) /* {{{ */
 					efree(path);
 					*new_len = 1;
 					efree(newpath);
-					return estrndup("/", 1);
+					return estrndup(ZEND_STRL("/"));
 				}
 				break;
 			case 2:
@@ -2119,7 +2119,7 @@ char *phar_fix_filepath(char *path, size_t *new_len, int use_cwd) /* {{{ */
 					efree(path);
 					*new_len = 1;
 					efree(newpath);
-					return estrndup("/", 1);
+					return estrndup(ZEND_STRL("/"));
 				}
 		}
 		efree(newpath);
@@ -2200,7 +2200,7 @@ int phar_split_fname(const char *filename, size_t filename_len, char **arch, siz
 		return FAILURE;
 	}
 
-	if (!strncasecmp(filename, "phar://", 7)) {
+	if (!strncasecmp(filename, ZEND_STRL("phar://"))) {
 		filename += 7;
 		filename_len -= 7;
 	}
@@ -2248,7 +2248,7 @@ int phar_split_fname(const char *filename, size_t filename_len, char **arch, siz
 		*entry = phar_fix_filepath(*entry, entry_len, 0);
 	} else {
 		*entry_len = 1;
-		*entry = estrndup("/", 1);
+		*entry = estrndup(ZEND_STRL("/"));
 	}
 
 #ifdef PHP_WIN32
@@ -2930,7 +2930,7 @@ int phar_flush(phar_archive_data *phar, char *user_stub, zend_long len, int conv
 
 		if (4 != php_stream_write(newfile, entry_buffer, 4)
 		|| entry->filename_len != php_stream_write(newfile, entry->filename, entry->filename_len)
-		|| (entry->is_dir && 1 != php_stream_write(newfile, "/", 1))) {
+		|| (entry->is_dir && 1 != php_stream_write(newfile, ZEND_STRL("/")))) {
 			if (closeoldfile) {
 				php_stream_close(oldfile);
 			}
@@ -3110,7 +3110,7 @@ int phar_flush(phar_archive_data *phar, char *user_stub, zend_long len, int conv
 		}
 		phar_set_32(sig_buf, phar->sig_flags);
 		php_stream_write(newfile, sig_buf, 4);
-		php_stream_write(newfile, "GBMB", 4);
+		php_stream_write(newfile, ZEND_STRL("GBMB"));
 	}
 
 	/* finally, close the temp file, rename the original phar,

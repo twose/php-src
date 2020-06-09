@@ -142,7 +142,7 @@ void mysqli_common_connect(INTERNAL_FUNCTION_PARAMETERS, zend_bool is_real_conne
 		php_mysqli_close(mysql, MYSQLI_CLOSE_IMPLICIT, mysqli_resource->status);
 	}
 
-	if (strlen(SAFE_STR(hostname)) > 2 && !strncasecmp(hostname, "p:", 2)) {
+	if (strlen(SAFE_STR(hostname)) > 2 && !strncasecmp(hostname, ZEND_STRL("p:"))) {
 		hostname += 2;
 		if (!MyG(allow_persistent)) {
 			php_error_docref(NULL, E_WARNING, "Persistent connections are disabled. Downgrading to normal");

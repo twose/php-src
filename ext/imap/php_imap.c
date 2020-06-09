@@ -319,7 +319,7 @@ void mail_getquota(MAILSTREAM *stream, char *qroot, QUOTALIST *qlist)
 /* put parsing code here */
 	for(; qlist; qlist = qlist->next) {
 		array_init(&t_map);
-		if (strncmp(qlist->name, "STORAGE", 7) == 0)
+		if (strncmp(qlist->name, ZEND_STRL("STORAGE")) == 0)
 		{
 			/* this is to add backwards compatibility */
 			add_assoc_long_ex(return_value, "usage", sizeof("usage") - 1, qlist->usage);
@@ -3829,7 +3829,7 @@ PHP_FUNCTION(imap_mime_header_decode)
 	charset = (char *) safe_emalloc((end + 1), 2, 0);
 	text = &charset[end + 1];
 	while (offset < end) {	/* Reached end of the string? */
-		if ((charset_token = (zend_long)php_memnstr(&string[offset], "=?", 2, string + end))) {	/* Is there anything encoded in the string? */
+		if ((charset_token = (zend_long)php_memnstr(&string[offset], ZEND_STRL("=?"), string + end))) {	/* Is there anything encoded in the string? */
 			charset_token -= (zend_long)string;
 			if (offset != charset_token) {	/* Is there anything before the encoded data? */
 				/* Retrieve unencoded data that is found before encoded data */
@@ -3840,9 +3840,9 @@ PHP_FUNCTION(imap_mime_header_decode)
 				add_property_string(&myobject, "text", text);
 				zend_hash_next_index_insert(Z_ARRVAL_P(return_value), &myobject);
 			}
-			if ((encoding_token = (zend_long)php_memnstr(&string[charset_token+2], "?", 1, string+end))) {		/* Find token for encoding */
+			if ((encoding_token = (zend_long)php_memnstr(&string[charset_token+2], ZEND_STRL("?"), string+end))) {		/* Find token for encoding */
 				encoding_token -= (zend_long)string;
-				if ((end_token = (zend_long)php_memnstr(&string[encoding_token+3], "?=", 2, string+end))) {	/* Find token for end of encoded data */
+				if ((end_token = (zend_long)php_memnstr(&string[encoding_token+3], ZEND_STRL("?="), string+end))) {	/* Find token for end of encoded data */
 					end_token -= (zend_long)string;
 					memcpy(charset, &string[charset_token + 2], encoding_token - (charset_token + 2));	/* Extract charset encoding */
 					charset[encoding_token-(charset_token + 2)] = 0x00;
@@ -4463,7 +4463,7 @@ PHP_IMAP_EXPORT void mm_notify(MAILSTREAM *stream, char *str, long errflg)
 {
 	STRINGLIST *cur = NIL;
 
-	if (strncmp(str, "[ALERT] ", 8) == 0) {
+	if (strncmp(str, ZEND_STRL("[ALERT] ")) == 0) {
 		if (IMAPG(imap_alertstack) == NIL) {
 			IMAPG(imap_alertstack) = mail_newstringlist();
 			IMAPG(imap_alertstack)->LSIZE = strlen((char*)(IMAPG(imap_alertstack)->LTEXT = (unsigned char*)cpystr(str)));

@@ -129,7 +129,7 @@ file_os2_apptype(struct magic_set *ms, const char *fn, const void *buf,
 		 * ".com".
 		 */
 		if (stricmp(ext, ".com") == 0)
-			if (strncmp((const char *)buf, "MZ", 2))
+			if (strncmp((const char *)buf, ZEND_STRL("MZ")))
 				return (0);
 		if (file_printf(ms, "DOS executable") == -1)
 			return -1;

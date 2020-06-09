@@ -642,7 +642,7 @@ static php_stream * php_stream_url_wrap_rfc2397(php_stream_wrapper *wrapper, con
 	zend_string *base64_comma = NULL;
 
 	ZVAL_NULL(&meta);
-	if (memcmp(path, "data:", 5)) {
+	if (memcmp(path, ZEND_STRL("data:"))) {
 		return NULL;
 	}
 

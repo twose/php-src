@@ -203,7 +203,7 @@ DetectKanjiCode (unsigned char *str)
 	      strcmp (lang, "ja_JP.mscode") == 0 ||
 	      strcmp (lang, "ja_JP.PCK") == 0)
 	    whatcode = SJIS;
-	  else if (strncmp (lang, "ja", 2) == 0)
+	  else if (strncmp (lang, ZEND_STRL("ja")) == 0)
 #ifdef SJISPRE
 	    whatcode = SJIS;
 #else

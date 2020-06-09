@@ -451,7 +451,7 @@ gdImagePtr gdImageCreateFromJpegCtxEx (gdIOCtx * infile, int ignore_warning)
 		channels = 4;
 		marker = cinfo.marker_list;
 		while (marker) {
-			if ((marker->marker == (JPEG_APP0 + 14)) && (marker->data_length >= 12) && (!strncmp((const char *) marker->data, "Adobe", 5))) {
+			if ((marker->marker == (JPEG_APP0 + 14)) && (marker->data_length >= 12) && (!strncmp((const char *) marker->data, ZEND_STRL("Adobe")))) {
 				inverted = 1;
 				break;
 			}

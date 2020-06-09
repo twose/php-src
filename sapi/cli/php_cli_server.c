@@ -334,7 +334,7 @@ static void append_http_status_line(smart_str *buffer, int protocol_version, int
 	if (!response_code) {
 		response_code = 200;
 	}
-	smart_str_appendl_ex(buffer, "HTTP", 4, persistent);
+	smart_str_appendl_ex(buffer, ZEND_STRL("HTTP"), persistent);
 	smart_str_appendc_ex(buffer, '/', persistent);
 	smart_str_append_long_ex(buffer, protocol_version / 100, persistent);
 	smart_str_appendc_ex(buffer, '.', persistent);
@@ -2130,7 +2130,7 @@ static int php_cli_server_begin_send_static(php_cli_server *server, php_cli_serv
 		if (mime_type) {
 			smart_str_appendl_ex(&buffer, "Content-Type: ", sizeof("Content-Type: ") - 1, 1);
 			smart_str_appends_ex(&buffer, mime_type, 1);
-			if (strncmp(mime_type, "text/", 5) == 0) {
+			if (strncmp(mime_type, ZEND_STRL("text/")) == 0) {
 				smart_str_appends_ex(&buffer, "; charset=UTF-8", 1);
 			}
 			smart_str_appendl_ex(&buffer, "\r\n", 2, 1);
@@ -2221,7 +2221,7 @@ static int php_cli_server_dispatch(php_cli_server *server, php_cli_server_client
 	int is_static_file  = 0;
 
 	SG(server_context) = client;
-	if (client->request.ext_len != 3 || memcmp(client->request.ext, "php", 3) || !client->request.path_translated) {
+	if (client->request.ext_len != 3 || memcmp(client->request.ext, ZEND_STRL("php")) || !client->request.path_translated) {
 		is_static_file = 1;
 	}
 

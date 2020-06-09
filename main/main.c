@@ -851,12 +851,12 @@ PHPAPI ZEND_COLD void php_log_err_with_severity(const char *log_message, int sys
 			time(&error_time);
 #ifdef ZTS
 			if (!php_during_module_startup()) {
-				error_time_str = php_format_date("d-M-Y H:i:s e", 13, error_time, 1);
+				error_time_str = php_format_date(ZEND_STRL("d-M-Y H:i:s e"), error_time, 1);
 			} else {
-				error_time_str = php_format_date("d-M-Y H:i:s e", 13, error_time, 0);
+				error_time_str = php_format_date(ZEND_STRL("d-M-Y H:i:s e"), error_time, 0);
 			}
 #else
-			error_time_str = php_format_date("d-M-Y H:i:s e", 13, error_time, 1);
+			error_time_str = php_format_date(ZEND_STRL("d-M-Y H:i:s e"), error_time, 1);
 #endif
 			len = spprintf(&tmp, 0, "[%s] %s%s", ZSTR_VAL(error_time_str), log_message, PHP_EOL);
 #ifdef PHP_WIN32
@@ -1065,7 +1065,7 @@ PHPAPI ZEND_COLD void php_verror(const char *docref, const char *params, int typ
 	 * - the user wants to see the links
 	 */
 	if (docref && is_function && PG(html_errors) && strlen(PG(docref_root))) {
-		if (strncmp(docref, "http://", 7)) {
+		if (strncmp(docref, ZEND_STRL("http://"))) {
 			/* We don't have 'http://' so we use docref_root */
 
 			char *ref;  /* temp copy for duplicated docref */
@@ -2656,7 +2656,7 @@ PHPAPI int php_handle_auth_data(const char *auth)
 {
 	int ret = -1;
 
-	if (auth && auth[0] != '\0' && strncmp(auth, "Basic ", 6) == 0) {
+	if (auth && auth[0] != '\0' && strncmp(auth, ZEND_STRL("Basic ")) == 0) {
 		char *pass;
 		zend_string *user;
 
@@ -2679,7 +2679,7 @@ PHPAPI int php_handle_auth_data(const char *auth)
 		SG(request_info).auth_digest = NULL;
 	}
 
-	if (ret == -1 && auth && auth[0] != '\0' && strncmp(auth, "Digest ", 7) == 0) {
+	if (ret == -1 && auth && auth[0] != '\0' && strncmp(auth, ZEND_STRL("Digest ")) == 0) {
 		SG(request_info).auth_digest = estrdup(auth + 7);
 		ret = 0;
 	}

@@ -884,7 +884,7 @@ static struct gfxinfo *php_handle_iff(php_stream * stream)
 	if (php_stream_read(stream, (char *) a, 8) != 8) {
 		return NULL;
 	}
-	if (strncmp((char *) a+4, "ILBM", 4) && strncmp((char *) a+4, "PBM ", 4)) {
+	if (strncmp((char *) a+4, ZEND_STRL("ILBM")) && strncmp((char *) a+4, ZEND_STRL("PBM "))) {
 		return NULL;
 	}
 

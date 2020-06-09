@@ -219,14 +219,14 @@ char *_xmlreader_get_valid_file_path(char *source, char *resolved_path, int reso
 
 	if (uri->scheme != NULL) {
 		/* absolute file uris - libxml only supports localhost or empty host */
-		if (strncasecmp(source, "file:///",8) == 0) {
+		if (strncasecmp(source, ZEND_STRL("file:///")) == 0) {
 			isFileUri = 1;
 #ifdef PHP_WIN32
 			source += 8;
 #else
 			source += 7;
 #endif
-		} else if (strncasecmp(source, "file://localhost/",17) == 0) {
+		} else if (strncasecmp(source, ZEND_STRL("file://localhost/")) == 0) {
 			isFileUri = 1;
 #ifdef PHP_WIN32
 			source += 17;

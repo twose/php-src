@@ -860,7 +860,7 @@ finish:
 							s = ZSTR_VAL(resource->path);
 							if (!ZSTR_LEN(resource->path)) {
 								zend_string_release_ex(resource->path, 0);
-								resource->path = zend_string_init("/", 1, 0);
+								resource->path = zend_string_init(ZEND_STRL("/"), 0);
 								s = ZSTR_VAL(resource->path);
 							} else {
 								*s = '/';

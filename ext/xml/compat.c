@@ -315,9 +315,9 @@ _build_comment(const xmlChar *data, int data_len, xmlChar **comment, int *commen
 	*comment_len = data_len + 7;
 
 	*comment = xmlMalloc(*comment_len + 1);
-	memcpy(*comment, "<!--", 4);
+	memcpy(*comment, ZEND_STRL("<!--"));
 	memcpy(*comment + 4, data, data_len);
-	memcpy(*comment + 4 + data_len, "-->", 3);
+	memcpy(*comment + 4 + data_len, ZEND_STRL("-->"));
 
 	(*comment)[*comment_len] = '\0';
 }

@@ -396,7 +396,7 @@ static int sapi_cgi_send_headers(sapi_headers_struct *sapi_headers)
 			if (SG(sapi_headers).http_status_line &&
 				(s = strchr(SG(sapi_headers).http_status_line, ' ')) != 0 &&
 				(s - SG(sapi_headers).http_status_line) >= 5 &&
-				strncasecmp(SG(sapi_headers).http_status_line, "HTTP/", 5) == 0
+				strncasecmp(SG(sapi_headers).http_status_line, ZEND_STRL("HTTP/")) == 0
 			) {
 				len = slprintf(buf, sizeof(buf), "Status:%s\r\n", s);
 				response_status = atoi((s + 1));

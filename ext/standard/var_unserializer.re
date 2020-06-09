@@ -893,11 +893,11 @@ static int php_var_unserialize_internal(UNSERIALIZE_PARAMETER, int as_key)
 "d:" ("NAN" | "-"? "INF") ";"	{
 	*p = YYCURSOR;
 
-	if (!strncmp((char*)start + 2, "NAN", 3)) {
+	if (!strncmp((char*)start + 2, ZEND_STRL("NAN"))) {
 		ZVAL_DOUBLE(rval, ZEND_NAN);
-	} else if (!strncmp((char*)start + 2, "INF", 3)) {
+	} else if (!strncmp((char*)start + 2, ZEND_STRL("INF"))) {
 		ZVAL_DOUBLE(rval, ZEND_INFINITY);
-	} else if (!strncmp((char*)start + 2, "-INF", 4)) {
+	} else if (!strncmp((char*)start + 2, ZEND_STRL("-INF"))) {
 		ZVAL_DOUBLE(rval, -ZEND_INFINITY);
 	} else {
 		ZVAL_NULL(rval);

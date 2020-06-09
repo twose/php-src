@@ -3667,9 +3667,9 @@ static void exif_process_TIFF_in_JPEG(image_info_type *ImageInfo, char *CharBuf,
 	}
 
 	/* set the thumbnail stuff to nothing so we can test to see if they get set up */
-	if (memcmp(CharBuf, "II", 2) == 0) {
+	if (memcmp(CharBuf, ZEND_STRL("II")) == 0) {
 		ImageInfo->motorola_intel = 0;
-	} else if (memcmp(CharBuf, "MM", 2) == 0) {
+	} else if (memcmp(CharBuf, ZEND_STRL("MM")) == 0) {
 		ImageInfo->motorola_intel = 1;
 	} else {
 		exif_error_docref(NULL EXIFERR_CC, ImageInfo, E_WARNING, "Invalid TIFF alignment marker");

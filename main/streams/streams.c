@@ -1845,7 +1845,7 @@ PHPAPI php_stream_wrapper *php_stream_locate_url_wrapper(const char *path, const
 		if (protocol) {
 			int localhost = 0;
 
-			if (!strncasecmp(path, "file://localhost/", 17)) {
+			if (!strncasecmp(path, ZEND_STRL("file://localhost/"))) {
 				localhost = 1;
 			}
 

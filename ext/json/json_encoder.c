@@ -81,7 +81,7 @@ static inline void php_json_pretty_print_indent(smart_str *buf, int options, php
 
 	if (options & PHP_JSON_PRETTY_PRINT) {
 		for (i = 0; i < encoder->depth; ++i) {
-			smart_str_appendl(buf, "    ", 4);
+			smart_str_appendl(buf, ZEND_STRL("    "));
 		}
 	}
 }
@@ -141,7 +141,7 @@ static int php_json_encode_array(smart_str *buf, zval *val, int options, php_jso
 
 	if (myht && GC_IS_RECURSIVE(myht)) {
 		encoder->error_code = PHP_JSON_ERROR_RECURSION;
-		smart_str_appendl(buf, "null", 4);
+		smart_str_appendl(buf, ZEND_STRL("null"));
 		zend_release_properties(prop_ht);
 		return FAILURE;
 	}
@@ -329,7 +329,7 @@ static int php_json_escape_string(
 						ZSTR_LEN(buf->s) = checkpoint;
 						encoder->error_code = PHP_JSON_ERROR_UTF8;
 						if (options & PHP_JSON_PARTIAL_OUTPUT_ON_ERROR) {
-							smart_str_appendl(buf, "null", 4);
+							smart_str_appendl(buf, ZEND_STRL("null"));
 						}
 						return FAILURE;
 					}
@@ -476,7 +476,7 @@ static int php_json_encode_serializable_object(smart_str *buf, zval *val, int op
 	if (myht && GC_IS_RECURSIVE(myht)) {
 		encoder->error_code = PHP_JSON_ERROR_RECURSION;
 		if (options & PHP_JSON_PARTIAL_OUTPUT_ON_ERROR) {
-			smart_str_appendl(buf, "null", 4);
+			smart_str_appendl(buf, ZEND_STRL("null"));
 		}
 		return FAILURE;
 	}
@@ -492,7 +492,7 @@ static int php_json_encode_serializable_object(smart_str *buf, zval *val, int op
 		zval_ptr_dtor(&fname);
 
 		if (options & PHP_JSON_PARTIAL_OUTPUT_ON_ERROR) {
-			smart_str_appendl(buf, "null", 4);
+			smart_str_appendl(buf, ZEND_STRL("null"));
 		}
 		PHP_JSON_HASH_UNPROTECT_RECURSION(myht);
 		return FAILURE;
@@ -504,7 +504,7 @@ static int php_json_encode_serializable_object(smart_str *buf, zval *val, int op
 		zval_ptr_dtor(&fname);
 
 		if (options & PHP_JSON_PARTIAL_OUTPUT_ON_ERROR) {
-			smart_str_appendl(buf, "null", 4);
+			smart_str_appendl(buf, ZEND_STRL("null"));
 		}
 		PHP_JSON_HASH_UNPROTECT_RECURSION(myht);
 		return FAILURE;
@@ -534,14 +534,14 @@ again:
 	switch (Z_TYPE_P(val))
 	{
 		case IS_NULL:
-			smart_str_appendl(buf, "null", 4);
+			smart_str_appendl(buf, ZEND_STRL("null"));
 			break;
 
 		case IS_TRUE:
-			smart_str_appendl(buf, "true", 4);
+			smart_str_appendl(buf, ZEND_STRL("true"));
 			break;
 		case IS_FALSE:
-			smart_str_appendl(buf, "false", 5);
+			smart_str_appendl(buf, ZEND_STRL("false"));
 			break;
 
 		case IS_LONG:
@@ -583,7 +583,7 @@ again:
 		default:
 			encoder->error_code = PHP_JSON_ERROR_UNSUPPORTED_TYPE;
 			if (options & PHP_JSON_PARTIAL_OUTPUT_ON_ERROR) {
-				smart_str_appendl(buf, "null", 4);
+				smart_str_appendl(buf, ZEND_STRL("null"));
 			}
 			return FAILURE;
 	}

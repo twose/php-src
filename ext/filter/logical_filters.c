@@ -284,32 +284,32 @@ void php_filter_boolean(PHP_INPUT_FILTER_PARAM_DECL) /* {{{ */
 			}
 			break;
 		case 2:
-			if (strncasecmp(str, "on", 2) == 0) {
+			if (strncasecmp(str, ZEND_STRL("on")) == 0) {
 				ret = 1;
-			} else if (strncasecmp(str, "no", 2) == 0) {
+			} else if (strncasecmp(str, ZEND_STRL("no")) == 0) {
 				ret = 0;
 			} else {
 				ret = -1;
 			}
 			break;
 		case 3:
-			if (strncasecmp(str, "yes", 3) == 0) {
+			if (strncasecmp(str, ZEND_STRL("yes")) == 0) {
 				ret = 1;
-			} else if (strncasecmp(str, "off", 3) == 0) {
+			} else if (strncasecmp(str, ZEND_STRL("off")) == 0) {
 				ret = 0;
 			} else {
 				ret = -1;
 			}
 			break;
 		case 4:
-			if (strncasecmp(str, "true", 4) == 0) {
+			if (strncasecmp(str, ZEND_STRL("true")) == 0) {
 				ret = 1;
 			} else {
 				ret = -1;
 			}
 			break;
 		case 5:
-			if (strncasecmp(str, "false", 5) == 0) {
+			if (strncasecmp(str, ZEND_STRL("false")) == 0) {
 				ret = 0;
 			} else {
 				ret = -1;

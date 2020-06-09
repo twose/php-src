@@ -2218,7 +2218,7 @@ char * LSAPI_GetEnv_r( LSAPI_Request * pReq, const char * name )
     struct LSAPI_key_value_pair * pEnd = pBegin + pReq->m_pHeader->m_cntEnv;
     if ( !pReq || !name )
         return NULL;
-    if ( strncmp( name, "HTTP_", 5 ) == 0 )
+    if ( strncmp( name, ZEND_STRL("HTTP_") ) == 0 )
     {
         return GetHeaderVar( pReq, name );
     }
@@ -2365,7 +2365,7 @@ int LSAPI_ForeachHeader_r( LSAPI_Request * pReq,
             if ( keyLen > 250 )
                 keyLen = 250;
             pKeyEnd = pKey + keyLen;
-            memcpy( achHeaderName, "HTTP_", 5 );
+            memcpy( achHeaderName, ZEND_STRL("HTTP_") );
             p = &achHeaderName[5];
 
             while( pKey < pKeyEnd )
@@ -3565,8 +3565,8 @@ static void unset_lsapi_envs(void)
 #endif
     while( env != NULL && *env != NULL )
     {
-        if (!strncmp(*env, "LSAPI_", 6) || !strncmp( *env, "PHP_LSAPI_", 10 )
-            || (!strncmp( *env, "PHPRC=", 6 )&&(!s_uid)))
+        if (!strncmp(*env, ZEND_STRL("LSAPI_")) || !strncmp( *env, ZEND_STRL("PHP_LSAPI_") )
+            || (!strncmp( *env, ZEND_STRL("PHPRC=") )&&(!s_uid)))
         {
             char ** del = env;
             do
@@ -3657,7 +3657,7 @@ static int lsapi_check_path(const char *p, char *final, int max_len)
     if (realpath(p, resolved_path) == NULL
         && errno != ENOENT && errno != EACCES)
         return -1;
-    if (strncmp(resolved_path, "/etc/", 5) == 0)
+    if (strncmp(resolved_path, ZEND_STRL("/etc/")) == 0)
     {
         errno = EPERM;
         return -1;

@@ -6439,7 +6439,7 @@ PHP_PGSQL_API int php_pgsql_update(PGconn *pg_link, const char *table, zval *var
 	build_tablename(&querystr, pg_link, table);
 	smart_str_appends(&querystr, " SET ");
 
-	if (build_assignment_string(pg_link, &querystr, Z_ARRVAL_P(var_array), 0, ",", 1, opt))
+	if (build_assignment_string(pg_link, &querystr, Z_ARRVAL_P(var_array), 0, ZEND_STRL(","), opt))
 		goto cleanup;
 
 	smart_str_appends(&querystr, " WHERE ");

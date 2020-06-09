@@ -273,7 +273,7 @@ static void sapi_lsapi_register_variables(zval *track_vars_array)
 
         LSAPI_ForeachHeader( add_variable, track_vars_array );
         LSAPI_ForeachEnv( add_variable, track_vars_array );
-        add_variable("PHP_SELF", 8, php_self, strlen( php_self ), track_vars_array );
+        add_variable(ZEND_STRL("PHP_SELF"), php_self, strlen( php_self ), track_vars_array );
     } else {
         php_import_environment_variables(track_vars_array);
 
@@ -392,7 +392,7 @@ static int sapi_lsapi_send_headers_like_cgi(sapi_headers_struct *sapi_headers)
         if (SG(sapi_headers).http_status_line &&
              (s = strchr(SG(sapi_headers).http_status_line, ' ')) != 0 &&
              (s - SG(sapi_headers).http_status_line) >= 5 &&
-             strncasecmp(SG(sapi_headers).http_status_line, "HTTP/", 5) == 0
+             strncasecmp(SG(sapi_headers).http_status_line, ZEND_STRL("HTTP/")) == 0
         ) {
             len = slprintf(buf, sizeof(buf), "Status:%s", s);
             response_status = atoi((s + 1));
@@ -711,12 +711,12 @@ static void lsapi_clean_shutdown()
     setitimer(ITIMER_PROF, &tmv, NULL);
 
 #if PHP_MAJOR_VERSION >= 7
-    key = zend_string_init("error_reporting", 15, 1);
-    zend_alter_ini_entry_chars_ex(key, "0", 1,
+    key = zend_string_init(ZEND_STRL("error_reporting"), 1);
+    zend_alter_ini_entry_chars_ex(key, ZEND_STRL("0"),
                         PHP_INI_SYSTEM, PHP_INI_STAGE_SHUTDOWN, 1);
     zend_string_release(key);
 #else
-    zend_alter_ini_entry("error_reporting", 16, "0", 1,
+    zend_alter_ini_entry("error_reporting", 16, ZEND_STRL("0"),
                         PHP_INI_SYSTEM, PHP_INI_STAGE_SHUTDOWN);
 #endif
 
@@ -818,7 +818,7 @@ static int alter_ini( const char * pKey, int keyLen, const char * pValue, int va
         }
         ++pKey;
         --keyLen;
-        if (( keyLen == 7 )&&( strncasecmp( pKey, "engine", 6 )== 0 ))
+        if (( keyLen == 7 )&&( strncasecmp( pKey, ZEND_STRL("engine") )== 0 ))
         {
             if ( *pValue == '0' )
                 engine = 0;
@@ -1136,8 +1136,8 @@ static int processReq(void)
                 ret = -1;
             }
         } else {
-            LSAPI_AppendRespHeader( "status: 403", 11 );
-            LSAPI_AppendRespHeader( "content-type: text/html", 23 );
+            LSAPI_AppendRespHeader( ZEND_STRL("status: 403") );
+            LSAPI_AppendRespHeader( ZEND_STRL("content-type: text/html") );
             LSAPI_Write( "Forbidden: PHP engine is disable.\n", 34 );
         }
     } zend_end_try();

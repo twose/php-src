@@ -310,7 +310,7 @@ static zend_bool soap_check_zval_ref(zval *data, xmlNodePtr node) {
 					id = ZSTR_VAL(prefix.s);
 				} else {
 					SOAP_GLOBAL(cur_uniq_ref)++;
-					smart_str_appendl(&prefix, "#ref", 4);
+					smart_str_appendl(&prefix, ZEND_STRL("#ref"));
 					smart_str_append_long(&prefix, SOAP_GLOBAL(cur_uniq_ref));
 					smart_str_0(&prefix);
 					id = ZSTR_VAL(prefix.s);
@@ -327,7 +327,7 @@ static zend_bool soap_check_zval_ref(zval *data, xmlNodePtr node) {
 					id = ZSTR_VAL(prefix.s);
 				} else {
 					SOAP_GLOBAL(cur_uniq_ref)++;
-					smart_str_appendl(&prefix, "#ref", 4);
+					smart_str_appendl(&prefix, ZEND_STRL("#ref"));
 					smart_str_append_long(&prefix, SOAP_GLOBAL(cur_uniq_ref));
 					smart_str_0(&prefix);
 					id = ZSTR_VAL(prefix.s);
@@ -3381,7 +3381,7 @@ xmlNsPtr encode_add_ns(xmlNodePtr node, const char* ns)
 			int num = ++SOAP_GLOBAL(cur_uniq_ns);
 
 			while (1) {
-				smart_str_appendl(&prefix, "ns", 2);
+				smart_str_appendl(&prefix, ZEND_STRL("ns"));
 				smart_str_append_long(&prefix, num);
 				smart_str_0(&prefix);
 				if (xmlSearchNs(node->doc, node, BAD_CAST(ZSTR_VAL(prefix.s))) == NULL) {
