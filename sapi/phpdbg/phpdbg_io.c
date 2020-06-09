@@ -206,7 +206,7 @@ static int phpdbg_output_pager(int sock, const char *ptr, int len) {
 				if (*buf == 'q') {
 					break;
 				}
-				zend_quiet_write(sock, "\r", 1);
+				zend_quiet_write(sock, ZEND_STRL("\r"));
 			} else break;
 		}
 	}

@@ -2898,9 +2898,9 @@ static void exif_thumbnail_build(image_info_type *ImageInfo) {
 			ImageInfo->Thumbnail.size += new_size;
 			/* fill in data */
 			if (ImageInfo->motorola_intel) {
-				memmove(new_data, "MM\x00\x2a\x00\x00\x00\x08", 8);
+				memmove(new_data, ZEND_STRL("MM\x00\x2a\x00\x00\x00\x08"));
 			} else {
-				memmove(new_data, "II\x2a\x00\x08\x00\x00\x00", 8);
+				memmove(new_data, ZEND_STRL("II\x2a\x00\x08\x00\x00\x00"));
 			}
 			new_data += 8;
 			php_ifd_set16u(new_data, info_list->count, ImageInfo->motorola_intel);
@@ -3038,18 +3038,18 @@ static int exif_process_user_comment(image_info_type *ImageInfo, char **pszInfoP
 	/* Copy the comment */
 	if (ByteCount>=8) {
 		const zend_encoding *from, *to;
-		if (!memcmp(szValuePtr, "UNICODE\0", 8)) {
+		if (!memcmp(szValuePtr, ZEND_STRL("UNICODE\0"))) {
 			*pszEncoding = estrdup((const char*)szValuePtr);
 			szValuePtr = szValuePtr+8;
 			ByteCount -= 8;
 			/* First try to detect BOM: ZERO WIDTH NOBREAK SPACE (FEFF 16)
 			 * since we have no encoding support for the BOM yet we skip that.
 			 */
-			if (ByteCount >=2 && !memcmp(szValuePtr, "\xFE\xFF", 2)) {
+			if (ByteCount >=2 && !memcmp(szValuePtr, ZEND_STRL("\xFE\xFF"))) {
 				decode = "UCS-2BE";
 				szValuePtr = szValuePtr+2;
 				ByteCount -= 2;
-			} else if (ByteCount >=2 && !memcmp(szValuePtr, "\xFF\xFE", 2)) {
+			} else if (ByteCount >=2 && !memcmp(szValuePtr, ZEND_STRL("\xFF\xFE"))) {
 				decode = "UCS-2LE";
 				szValuePtr = szValuePtr+2;
 				ByteCount -= 2;
@@ -3071,11 +3071,11 @@ static int exif_process_user_comment(image_info_type *ImageInfo, char **pszInfoP
 				len = exif_process_string_raw(pszInfoPtr, szValuePtr, ByteCount);
 			}
 			return len;
-		} else if (!memcmp(szValuePtr, "ASCII\0\0\0", 8)) {
+		} else if (!memcmp(szValuePtr, ZEND_STRL("ASCII\0\0\0"))) {
 			*pszEncoding = estrdup((const char*)szValuePtr);
 			szValuePtr = szValuePtr+8;
 			ByteCount -= 8;
-		} else if (!memcmp(szValuePtr, "JIS\0\0\0\0\0", 8)) {
+		} else if (!memcmp(szValuePtr, ZEND_STRL("JIS\0\0\0\0\0"))) {
 			/* JIS should be translated to MB or we leave it to the user - leave it to the user */
 			*pszEncoding = estrdup((const char*)szValuePtr);
 			szValuePtr = szValuePtr+8;
@@ -3093,7 +3093,7 @@ static int exif_process_user_comment(image_info_type *ImageInfo, char **pszInfoP
 				len = exif_process_string_raw(pszInfoPtr, szValuePtr, ByteCount);
 			}
 			return len;
-		} else if (!memcmp(szValuePtr, "\0\0\0\0\0\0\0\0", 8)) {
+		} else if (!memcmp(szValuePtr, ZEND_STRL("\0\0\0\0\0\0\0\0"))) {
 			/* 8 NULL means undefined and should be ASCII... */
 			*pszEncoding = estrdup("UNDEFINED");
 			szValuePtr = szValuePtr+8;
@@ -3927,7 +3927,7 @@ static int exif_scan_thumbnail(image_info_type *ImageInfo)
 	if (!data || ImageInfo->Thumbnail.size < 4) {
 		return FALSE; /* nothing to do here */
 	}
-	if (memcmp(data, "\xFF\xD8\xFF", 3)) {
+	if (memcmp(data, ZEND_STRL("\xFF\xD8\xFF"))) {
 		if (!ImageInfo->Thumbnail.width && !ImageInfo->Thumbnail.height) {
 			exif_error_docref(NULL EXIFERR_CC, ImageInfo, E_WARNING, "Thumbnail is not a JPEG image");
 		}
@@ -4270,7 +4270,7 @@ static int exif_scan_FILE_header(image_info_type *ImageInfo)
 			if (php_stream_read(ImageInfo->infile, (char*)(file_header+2), 6) != 6) {
 				return FALSE;
 			}
-			if (!memcmp(file_header, "II\x2A\x00", 4)) {
+			if (!memcmp(file_header, ZEND_STRL("II\x2A\x00"))) {
 				ImageInfo->FileType = IMAGE_FILETYPE_TIFF_II;
 				ImageInfo->motorola_intel = 0;
 #ifdef EXIF_DEBUG
@@ -4284,7 +4284,7 @@ static int exif_scan_FILE_header(image_info_type *ImageInfo)
 				} else {
 					exif_error_docref(NULL EXIFERR_CC, ImageInfo, E_WARNING, "Invalid TIFF file");
 				}
-			} else if (!memcmp(file_header, "MM\x00\x2a", 4)) {
+			} else if (!memcmp(file_header, ZEND_STRL("MM\x00\x2a"))) {
 				ImageInfo->FileType = IMAGE_FILETYPE_TIFF_MM;
 				ImageInfo->motorola_intel = 1;
 #ifdef EXIF_DEBUG

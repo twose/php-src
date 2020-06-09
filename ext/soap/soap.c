@@ -4352,7 +4352,7 @@ static void model_to_string(sdlContentModelPtr model, smart_str *buf, int level)
 	switch (model->kind) {
 		case XSD_CONTENT_ELEMENT:
 			type_to_string(model->u.element, buf, level);
-			smart_str_appendl(buf, ";\n", 2);
+			smart_str_appendl(buf, ZEND_STRL(";\n"));
 			break;
 		case XSD_CONTENT_ANY:
 			for (i = 0;i < level;i++) {
@@ -4497,7 +4497,7 @@ static void type_to_string(sdlTypePtr type, smart_str *buf, int level) /* {{{ */
 				smart_str_appendl(buf, ZEND_STRL("struct "));
 				smart_str_appendl(buf, type->name, strlen(type->name));
 				smart_str_appendc(buf, ' ');
-				smart_str_appendl(buf, "{\n", 2);
+				smart_str_appendl(buf, ZEND_STRL("{\n"));
 				if ((type->kind == XSD_TYPEKIND_RESTRICTION ||
 				     type->kind == XSD_TYPEKIND_EXTENSION) && type->encode) {
 					encodePtr enc = type->encode;
@@ -4514,7 +4514,7 @@ static void type_to_string(sdlTypePtr type, smart_str *buf, int level) /* {{{ */
 						}
 						smart_str_appendc(buf, ' ');
 						smart_str_appendl(buf, type->encode->details.type_str, strlen(type->encode->details.type_str));
-						smart_str_appendl(buf, " _;\n", 4);
+						smart_str_appendl(buf, ZEND_STRL(" _;\n"));
 					}
 				}
 				if (type->model) {
@@ -4535,7 +4535,7 @@ static void type_to_string(sdlTypePtr type, smart_str *buf, int level) /* {{{ */
 							smart_str_appendl(buf, ZEND_STRL("UNKNOWN "));
 						}
 						smart_str_appends(buf, attr->name);
-						smart_str_appendl(buf, ";\n", 2);
+						smart_str_appendl(buf, ZEND_STRL(";\n"));
 					} ZEND_HASH_FOREACH_END();
 				}
 				if (spaces.s) {

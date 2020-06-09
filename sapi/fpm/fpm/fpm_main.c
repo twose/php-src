@@ -387,7 +387,7 @@ static int sapi_cgi_send_headers(sapi_headers_struct *sapi_headers) /* {{{ */
 				if (!ignore_status) {
 					ignore_status = 1;
 					PHPWRITE_H(h->header, h->header_len);
-					PHPWRITE_H("\r\n", 2);
+					PHPWRITE_H(ZEND_STRL("\r\n"));
 				}
 			} else if (response_status == 304 && h->header_len > sizeof("Content-Type:") - 1 &&
 				strncasecmp(h->header, "Content-Type:", sizeof("Content-Type:") - 1) == 0
@@ -396,12 +396,12 @@ static int sapi_cgi_send_headers(sapi_headers_struct *sapi_headers) /* {{{ */
 				continue;
 			} else {
 				PHPWRITE_H(h->header, h->header_len);
-				PHPWRITE_H("\r\n", 2);
+				PHPWRITE_H(ZEND_STRL("\r\n"));
 			}
 		}
 		h = (sapi_header_struct*)zend_llist_get_next_ex(&sapi_headers->headers, &pos);
 	}
-	PHPWRITE_H("\r\n", 2);
+	PHPWRITE_H(ZEND_STRL("\r\n"));
 
 	return SAPI_HEADER_SENT_SUCCESSFULLY;
 }

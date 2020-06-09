@@ -321,9 +321,9 @@ static int php_json_escape_string(
 					} else if (options & PHP_JSON_INVALID_UTF8_SUBSTITUTE) {
 						/* Use Unicode character 'REPLACEMENT CHARACTER' (U+FFFD) */
 						if (options & PHP_JSON_UNESCAPED_UNICODE) {
-							smart_str_appendl(buf, "\xef\xbf\xbd", 3);
+							smart_str_appendl(buf, ZEND_STRL("\xef\xbf\xbd"));
 						} else {
-							smart_str_appendl(buf, "\\ufffd", 6);
+							smart_str_appendl(buf, ZEND_STRL("\\ufffd"));
 						}
 					} else {
 						ZSTR_LEN(buf->s) = checkpoint;
@@ -374,47 +374,47 @@ static int php_json_escape_string(
 				switch (us) {
 					case '"':
 						if (options & PHP_JSON_HEX_QUOT) {
-							smart_str_appendl(buf, "\\u0022", 6);
+							smart_str_appendl(buf, ZEND_STRL("\\u0022"));
 						} else {
 							smart_str_appendl(buf, "\\\"", 2);
 						}
 						break;
 
 					case '\\':
-						smart_str_appendl(buf, "\\\\", 2);
+						smart_str_appendl(buf, ZEND_STRL("\\\\"));
 						break;
 
 					case '/':
 						if (options & PHP_JSON_UNESCAPED_SLASHES) {
 							smart_str_appendc(buf, '/');
 						} else {
-							smart_str_appendl(buf, "\\/", 2);
+							smart_str_appendl(buf, ZEND_STRL("\\/"));
 						}
 						break;
 
 					case '\b':
-						smart_str_appendl(buf, "\\b", 2);
+						smart_str_appendl(buf, ZEND_STRL("\\b"));
 						break;
 
 					case '\f':
-						smart_str_appendl(buf, "\\f", 2);
+						smart_str_appendl(buf, ZEND_STRL("\\f"));
 						break;
 
 					case '\n':
-						smart_str_appendl(buf, "\\n", 2);
+						smart_str_appendl(buf, ZEND_STRL("\\n"));
 						break;
 
 					case '\r':
-						smart_str_appendl(buf, "\\r", 2);
+						smart_str_appendl(buf, ZEND_STRL("\\r"));
 						break;
 
 					case '\t':
-						smart_str_appendl(buf, "\\t", 2);
+						smart_str_appendl(buf, ZEND_STRL("\\t"));
 						break;
 
 					case '<':
 						if (options & PHP_JSON_HEX_TAG) {
-							smart_str_appendl(buf, "\\u003C", 6);
+							smart_str_appendl(buf, ZEND_STRL("\\u003C"));
 						} else {
 							smart_str_appendc(buf, '<');
 						}
@@ -422,7 +422,7 @@ static int php_json_escape_string(
 
 					case '>':
 						if (options & PHP_JSON_HEX_TAG) {
-							smart_str_appendl(buf, "\\u003E", 6);
+							smart_str_appendl(buf, ZEND_STRL("\\u003E"));
 						} else {
 							smart_str_appendc(buf, '>');
 						}
@@ -430,7 +430,7 @@ static int php_json_escape_string(
 
 					case '&':
 						if (options & PHP_JSON_HEX_AMP) {
-							smart_str_appendl(buf, "\\u0026", 6);
+							smart_str_appendl(buf, ZEND_STRL("\\u0026"));
 						} else {
 							smart_str_appendc(buf, '&');
 						}
@@ -438,7 +438,7 @@ static int php_json_escape_string(
 
 					case '\'':
 						if (options & PHP_JSON_HEX_APOS) {
-							smart_str_appendl(buf, "\\u0027", 6);
+							smart_str_appendl(buf, ZEND_STRL("\\u0027"));
 						} else {
 							smart_str_appendc(buf, '\'');
 						}

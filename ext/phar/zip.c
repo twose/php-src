@@ -206,7 +206,7 @@ int phar_parse_zipfile(php_stream *fp, char *fname, size_t fname_len, char *alia
 	}
 
 	while ((p=(char *) memchr(p + 1, 'P', (size_t) (size - (p + 1 - buf)))) != NULL) {
-		if ((p - buf) + sizeof(locator) <= (size_t)size && !memcmp(p + 1, "K\5\6", 3)) {
+		if ((p - buf) + sizeof(locator) <= (size_t)size && !memcmp(p + 1, ZEND_STRL("K\5\6"))) {
 			memcpy((void *)&locator, (void *) p, sizeof(locator));
 			if (PHAR_GET_16(locator.centraldisk) != 0 || PHAR_GET_16(locator.disknumber) != 0) {
 				/* split archives not handled */
@@ -821,8 +821,8 @@ static int phar_zip_changed_apply_int(phar_entry_info *entry, void *arg) /* {{{ 
 	memset(&local, 0, sizeof(local));
 	memset(&central, 0, sizeof(central));
 	memset(&perms, 0, sizeof(perms));
-	memcpy(local.signature, "PK\3\4", 4);
-	memcpy(central.signature, "PK\1\2", 4);
+	memcpy(local.signature, ZEND_STRL("PK\3\4"));
+	memcpy(central.signature, ZEND_STRL("PK\1\2"));
 	PHAR_SET_16(central.extra_len, sizeof(perms));
 	PHAR_SET_16(local.extra_len, sizeof(perms));
 	perms.tag[0] = 'n';
@@ -1319,7 +1319,7 @@ int phar_zip_flush(phar_archive_data *phar, char *user_stub, zend_long len, int 
 		entry.uncompressed_filesize = len + 5;
 
 		if ((size_t)len != php_stream_write(entry.fp, user_stub, len)
-		||            5 != php_stream_write(entry.fp, " ?>\r\n", 5)) {
+		||            5 != php_stream_write(entry.fp, ZEND_STRL(" ?>\r\n"))) {
 			if (error) {
 				spprintf(error, 0, "unable to create stub from string in new zip-based phar \"%s\"", phar->fname);
 			}
@@ -1409,7 +1409,7 @@ fperror:
 	pass.free_fp = pass.free_ufp = 1;
 	memset(&eocd, 0, sizeof(eocd));
 
-	memcpy(eocd.signature, "PK\5\6", 4);
+	memcpy(eocd.signature, ZEND_STRL("PK\5\6"));
 	if (!phar->is_data && !phar->sig_flags) {
 		phar->sig_flags = PHAR_SIG_SHA1;
 	}

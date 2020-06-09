@@ -849,7 +849,7 @@ ZEND_API zend_string *zend_create_member_string(zend_string *class_name, zend_st
 }
 
 zend_string *zend_concat_names(char *name1, size_t name1_len, char *name2, size_t name2_len) {
-	return zend_string_concat3(name1, name1_len, "\\", 1, name2, name2_len);
+	return zend_string_concat3(name1, name1_len, ZEND_STRL("\\"), name2, name2_len);
 }
 
 zend_string *zend_prefix_with_ns(zend_string *name) {

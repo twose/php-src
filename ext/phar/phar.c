@@ -2613,7 +2613,7 @@ int phar_flush(phar_archive_data *phar, char *user_stub, zend_long len, int conv
 		efree(tmp);
 		len = pos - user_stub + 18;
 		if ((size_t)len != php_stream_write(newfile, user_stub, len)
-		||			  5 != php_stream_write(newfile, " ?>\r\n", 5)) {
+		||			  5 != php_stream_write(newfile, ZEND_STRL(" ?>\r\n"))) {
 			if (closeoldfile) {
 				php_stream_close(oldfile);
 			}

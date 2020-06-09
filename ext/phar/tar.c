@@ -1083,7 +1083,7 @@ int phar_tar_flush(phar_archive_data *phar, char *user_stub, zend_long len, int 
 		entry.uncompressed_filesize = len + 5;
 
 		if ((size_t)len != php_stream_write(entry.fp, user_stub, len)
-		||            5 != php_stream_write(entry.fp, " ?>\r\n", 5)) {
+		||            5 != php_stream_write(entry.fp, ZEND_STRL(" ?>\r\n"))) {
 			if (error) {
 				spprintf(error, 0, "unable to create stub from string in new tar-based phar \"%s\"", phar->fname);
 			}

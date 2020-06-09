@@ -784,16 +784,16 @@ retry:
 				   d:\test\mnt\foo
 				   \\?\Volume{62d1c3f8-83b9-11de-b108-806e6f6e6963}\foo
 				*/
-				if (strncmp(substitutename, "\\??\\Volume{",11) == 0
-					|| strncmp(substitutename, "\\\\?\\Volume{",11) == 0
-					|| strncmp(substitutename, "\\??\\UNC\\", 8) == 0
+				if (strncmp(substitutename, ZEND_STRL("\\??\\Volume{")) == 0
+					|| strncmp(substitutename, ZEND_STRL("\\\\?\\Volume{")) == 0
+					|| strncmp(substitutename, ZEND_STRL("\\??\\UNC\\")) == 0
 					) {
 					isVolume = TRUE;
 					substitutename_off = 0;
 				} else
 					/* do not use the \??\ and \\?\ prefix*/
-					if (strncmp(substitutename, "\\??\\", 4) == 0
-						|| strncmp(substitutename, "\\\\?\\", 4) == 0) {
+					if (strncmp(substitutename, ZEND_STRL("\\??\\")) == 0
+						|| strncmp(substitutename, ZEND_STRL("\\\\?\\")) == 0) {
 					substitutename_off = 4;
 				}
 			}

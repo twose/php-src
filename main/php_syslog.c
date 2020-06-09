@@ -101,7 +101,7 @@ PHPAPI void php_syslog(int priority, const char *format, ...) /* {{{ */
 		else {
 			const char xdigits[] = "0123456789abcdef";
 
-			smart_string_appendl(&sbuf, "\\x", 2);
+			smart_string_appendl(&sbuf, ZEND_STRL("\\x"));
 			smart_string_appendc(&sbuf, xdigits[(c / 0x10)]);
 			c &= 0x0f;
 			smart_string_appendc(&sbuf, xdigits[c]);

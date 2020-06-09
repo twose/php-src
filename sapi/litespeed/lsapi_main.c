@@ -1138,7 +1138,7 @@ static int processReq(void)
         } else {
             LSAPI_AppendRespHeader( ZEND_STRL("status: 403") );
             LSAPI_AppendRespHeader( ZEND_STRL("content-type: text/html") );
-            LSAPI_Write( "Forbidden: PHP engine is disable.\n", 34 );
+            LSAPI_Write( ZEND_STRL("Forbidden: PHP engine is disable.\n") );
         }
     } zend_end_try();
     return ret;

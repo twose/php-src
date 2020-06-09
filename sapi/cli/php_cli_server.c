@@ -343,7 +343,7 @@ static void append_http_status_line(smart_str *buffer, int protocol_version, int
 	smart_str_append_long_ex(buffer, response_code, persistent);
 	smart_str_appendc_ex(buffer, ' ', persistent);
 	smart_str_appends_ex(buffer, get_status_string(response_code), persistent);
-	smart_str_appendl_ex(buffer, "\r\n", 2, persistent);
+	smart_str_appendl_ex(buffer, ZEND_STRL("\r\n"), persistent);
 } /* }}} */
 
 static void append_essential_headers(smart_str* buffer, php_cli_server_client *client, int persistent) /* {{{ */
@@ -594,7 +594,7 @@ static int sapi_cli_server_send_headers(sapi_headers_struct *sapi_headers) /* {{
 
 	if (SG(sapi_headers).http_status_line) {
 		smart_str_appends(&buffer, SG(sapi_headers).http_status_line);
-		smart_str_appendl(&buffer, "\r\n", 2);
+		smart_str_appendl(&buffer, ZEND_STRL("\r\n"));
 	} else {
 		append_http_status_line(&buffer, client->request.protocol_version, SG(sapi_headers).http_response_code, 0);
 	}
@@ -605,11 +605,11 @@ static int sapi_cli_server_send_headers(sapi_headers_struct *sapi_headers) /* {{
 	while (h) {
 		if (h->header_len) {
 			smart_str_appendl(&buffer, h->header, h->header_len);
-			smart_str_appendl(&buffer, "\r\n", 2);
+			smart_str_appendl(&buffer, ZEND_STRL("\r\n"));
 		}
 		h = (sapi_header_struct*)zend_llist_get_next_ex(&sapi_headers->headers, &pos);
 	}
-	smart_str_appendl(&buffer, "\r\n", 2);
+	smart_str_appendl(&buffer, ZEND_STRL("\r\n"));
 
 	php_cli_server_client_send_through(client, ZSTR_VAL(buffer.s), ZSTR_LEN(buffer.s));
 
@@ -2036,8 +2036,8 @@ static int php_cli_server_send_error_page(php_cli_server *server, php_cli_server
 		smart_str_appends_ex(&buffer, "Content-Type: text/html; charset=UTF-8\r\n", 1);
 		smart_str_appends_ex(&buffer, "Content-Length: ", 1);
 		smart_str_append_unsigned_ex(&buffer, php_cli_server_buffer_size(&client->content_sender.buffer), 1);
-		smart_str_appendl_ex(&buffer, "\r\n", 2, 1);
-		smart_str_appendl_ex(&buffer, "\r\n", 2, 1);
+		smart_str_appendl_ex(&buffer, ZEND_STRL("\r\n"), 1);
+		smart_str_appendl_ex(&buffer, ZEND_STRL("\r\n"), 1);
 
 		chunk = php_cli_server_chunk_heap_new(buffer.s, ZSTR_VAL(buffer.s), ZSTR_LEN(buffer.s));
 		if (!chunk) {
@@ -2133,12 +2133,12 @@ static int php_cli_server_begin_send_static(php_cli_server *server, php_cli_serv
 			if (strncmp(mime_type, ZEND_STRL("text/")) == 0) {
 				smart_str_appends_ex(&buffer, "; charset=UTF-8", 1);
 			}
-			smart_str_appendl_ex(&buffer, "\r\n", 2, 1);
+			smart_str_appendl_ex(&buffer, ZEND_STRL("\r\n"), 1);
 		}
 		smart_str_appends_ex(&buffer, "Content-Length: ", 1);
 		smart_str_append_unsigned_ex(&buffer, client->request.sb.st_size, 1);
-		smart_str_appendl_ex(&buffer, "\r\n", 2, 1);
-		smart_str_appendl_ex(&buffer, "\r\n", 2, 1);
+		smart_str_appendl_ex(&buffer, ZEND_STRL("\r\n"), 1);
+		smart_str_appendl_ex(&buffer, ZEND_STRL("\r\n"), 1);
 		chunk = php_cli_server_chunk_heap_new(buffer.s, ZSTR_VAL(buffer.s), ZSTR_LEN(buffer.s));
 		if (!chunk) {
 			smart_str_free_ex(&buffer, 1);

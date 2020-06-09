@@ -1082,7 +1082,7 @@ static int do_cli(int argc, char **argv) /* {{{ */
 						EG(exception) = NULL;
 					} else {
 						zend_print_zval(&ref, 0);
-						zend_write("\n", 1);
+						zend_write(ZEND_STRL("\n"));
 					}
 					zval_ptr_dtor(&ref);
 					zval_ptr_dtor(&arg);

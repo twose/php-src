@@ -655,7 +655,7 @@ static int parseEnv( struct LSAPI_key_value_pair * pEnvList, int count,
         pEnvList->valLen = valLen - 1;
         ++pEnvList;
     }
-    if ( memcmp( *pBegin, "\0\0\0\0", 4 ) != 0 )
+    if ( memcmp( *pBegin, ZEND_STRL("\0\0\0\0") ) != 0 )
         return -1;
     *pBegin += 4;
     return 0;
@@ -1339,7 +1339,7 @@ static inline int lsapi_notify_pid( int fd )
     char achBuf[16];
     lsapi_buildPacketHeader( (struct lsapi_packet_header *)achBuf, LSAPI_STDERR_STREAM,
                         8 + LSAPI_PACKET_HEADER_LEN );
-    memmove( &achBuf[8], "\0PID", 4 );
+    memmove( &achBuf[8], ZEND_STRL("\0PID") );
     *((int *)&achBuf[12]) = getpid();
 
     if ( write( fd, achBuf, 16 ) < 16 )

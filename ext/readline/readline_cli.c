@@ -678,7 +678,7 @@ static int readline_shell_run(void) /* {{{ */
 		pos = 0;
 
 		if (!pager_pipe && php_last_char != '\0' && php_last_char != '\n') {
-			php_write("\n", 1);
+			php_write(ZEND_STRL("\n"));
 		}
 
 		if (EG(exception)) {

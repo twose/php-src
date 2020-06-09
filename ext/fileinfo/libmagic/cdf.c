@@ -356,7 +356,7 @@ cdf_read_header(const cdf_info_t *info, cdf_header_t *h)
 {
 	char buf[512];
 
-	(void)memcpy(cdf_bo.s, "\01\02\03\04", 4);
+	(void)memcpy(cdf_bo.s, ZEND_STRL("\01\02\03\04"));
 	if (cdf_read(info, CAST(zend_off_t, 0), buf, sizeof(buf)) == -1)
 		return -1;
 	cdf_unpack_header(h, buf);
