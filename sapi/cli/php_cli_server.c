@@ -365,7 +365,7 @@ static void append_essential_headers(smart_str* buffer, php_cli_server_client *c
 		zend_string_release_ex(dt, 0);
 	}
 
-	smart_str_appendl_ex(buffer, "Connection: close\r\n", sizeof("Connection: close\r\n") - 1, persistent);
+	smart_str_appendl_ex(buffer, ZEND_STRL("Connection: close\r\n"), persistent);
 } /* }}} */
 
 static const char *get_mime_type(const php_cli_server *server, const char *ext, size_t ext_len) /* {{{ */
@@ -2128,7 +2128,7 @@ static int php_cli_server_begin_send_static(php_cli_server *server, php_cli_serv
 		}
 		append_essential_headers(&buffer, client, 1);
 		if (mime_type) {
-			smart_str_appendl_ex(&buffer, "Content-Type: ", sizeof("Content-Type: ") - 1, 1);
+			smart_str_appendl_ex(&buffer, ZEND_STRL("Content-Type: "));
 			smart_str_appends_ex(&buffer, mime_type, 1);
 			if (strncmp(mime_type, ZEND_STRL("text/")) == 0) {
 				smart_str_appends_ex(&buffer, "; charset=UTF-8", 1);

@@ -1124,9 +1124,9 @@ static int mysqli_begin_transaction_libmysql(MYSQL * conn, const unsigned int mo
 	smart_str tmp_str = {0};
 	if (mode & TRANS_START_WITH_CONSISTENT_SNAPSHOT) {
 		if (tmp_str.s) {
-			smart_str_appendl(&tmp_str, ", ", sizeof(", ") - 1);
+			smart_str_appendl(&tmp_str, ZEND_STRL(", "));
 		}
-		smart_str_appendl(&tmp_str, "WITH CONSISTENT SNAPSHOT", sizeof("WITH CONSISTENT SNAPSHOT") - 1);
+		smart_str_appendl(&tmp_str, ZEND_STRL("WITH CONSISTENT SNAPSHOT"));
 	}
 	if (mode & (TRANS_START_READ_WRITE | TRANS_START_READ_ONLY)) {
 		if (mysql_get_server_version(conn) < 50605L) {
@@ -1134,14 +1134,14 @@ static int mysqli_begin_transaction_libmysql(MYSQL * conn, const unsigned int mo
 			err = TRUE;
 		} else if (mode & TRANS_START_READ_WRITE) {
 			if (tmp_str.s) {
-				smart_str_appendl(&tmp_str, ", ", sizeof(", ") - 1);
+				smart_str_appendl(&tmp_str, ZEND_STRL(", "));
 			}
-			smart_str_appendl(&tmp_str, "READ WRITE", sizeof("READ WRITE") - 1);
+			smart_str_appendl(&tmp_str, ZEND_STRL("READ WRITE"));
 		} else if (mode & TRANS_START_READ_ONLY) {
 			if (tmp_str.s) {
-				smart_str_appendl(&tmp_str, ", ", sizeof(", ") - 1);
+				smart_str_appendl(&tmp_str, ZEND_STRL(", "));
 			}
-			smart_str_appendl(&tmp_str, "READ ONLY", sizeof("READ ONLY") - 1);
+			smart_str_appendl(&tmp_str, ZEND_STRL("READ ONLY"));
 		}
 	}
 	smart_str_0(&tmp_str);

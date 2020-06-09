@@ -4358,7 +4358,7 @@ static void model_to_string(sdlContentModelPtr model, smart_str *buf, int level)
 			for (i = 0;i < level;i++) {
 				smart_str_appendc(buf, ' ');
 			}
-			smart_str_appendl(buf, "<anyXML> any;\n", sizeof("<anyXML> any;\n")-1);
+			smart_str_appendl(buf, ZEND_STRL("<anyXML> any;\n"));
 			break;
 		case XSD_CONTENT_SEQUENCE:
 		case XSD_CONTENT_ALL:
@@ -4395,7 +4395,7 @@ static void type_to_string(sdlTypePtr type, smart_str *buf, int level) /* {{{ */
 				smart_str_appendl(buf, type->encode->details.type_str, strlen(type->encode->details.type_str));
 				smart_str_appendc(buf, ' ');
 			} else {
-				smart_str_appendl(buf, "anyType ", sizeof("anyType ")-1);
+				smart_str_appendl(buf, ZEND_STRL("anyType "));
 			}
 			smart_str_appendl(buf, type->name, strlen(type->name));
 			break;
@@ -4452,7 +4452,7 @@ static void type_to_string(sdlTypePtr type, smart_str *buf, int level) /* {{{ */
 						len = end - ext->val;
 					}
 					if (len == 0) {
-						smart_str_appendl(buf, "anyType", sizeof("anyType")-1);
+						smart_str_appendl(buf, ZEND_STRL("anyType"));
 					} else {
 						smart_str_appendl(buf, ext->val, len);
 					}

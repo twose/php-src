@@ -2390,7 +2390,7 @@ iterator_done:
 				smart_str_0(&array_type);
 				if (strcmp(ZSTR_VAL(array_type.s),"xsd:anyType") == 0) {
 					smart_str_free(&array_type);
-					smart_str_appendl(&array_type,"xsd:ur-type",sizeof("xsd:ur-type")-1);
+					smart_str_appendl(&array_type,ZEND_STRL("xsd:ur-type"));
 				}
 				smart_str_appendc(&array_type, '[');
 				smart_str_append_smart_str(&array_type, &array_size);
@@ -3476,7 +3476,7 @@ static encodePtr get_array_type(xmlNodePtr node, zval *array, smart_str *type)
 	char *prev_stype = NULL, *cur_stype = NULL, *prev_ns = NULL, *cur_ns = NULL;
 
 	if (!array || Z_TYPE_P(array) != IS_ARRAY) {
-		smart_str_appendl(type, "xsd:anyType", sizeof("xsd:anyType")-1);
+		smart_str_appendl(type, ZEND_STRL("xsd:anyType"));
 		return get_conversion(XSD_ANYTYPE);
 	}
 
@@ -3539,7 +3539,7 @@ static encodePtr get_array_type(xmlNodePtr node, zval *array, smart_str *type)
 	} ZEND_HASH_FOREACH_END();
 
 	if (different || i == 0) {
-		smart_str_appendl(type, "xsd:anyType", sizeof("xsd:anyType")-1);
+		smart_str_appendl(type, ZEND_STRL("xsd:anyType"));
 		return get_conversion(XSD_ANYTYPE);
 	} else {
 		encodePtr enc;

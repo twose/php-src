@@ -247,11 +247,11 @@ static php_stream *php_stream_url_wrap_http_ex(php_stream_wrapper *wrapper,
 			zval_ptr_dtor(&ssl_proxy_peer_name);
 		}
 
-		smart_str_appendl(&header, "CONNECT ", sizeof("CONNECT ")-1);
+		smart_str_appendl(&header, ZEND_STRL("CONNECT "));
 		smart_str_appends(&header, ZSTR_VAL(resource->host));
 		smart_str_appendc(&header, ':');
 		smart_str_append_unsigned(&header, resource->port);
-		smart_str_appendl(&header, " HTTP/1.0\r\n", sizeof(" HTTP/1.0\r\n")-1);
+		smart_str_appendl(&header, ZEND_STRL(" HTTP/1.0\r\n"));
 
 	    /* check if we have Proxy-Authorization header */
 		if (context && (tmpzval = php_stream_context_get_option(context, "http", "header")) != NULL) {
@@ -274,7 +274,7 @@ static php_stream *php_stream_url_wrap_http_ex(php_stream_wrapper *wrapper,
 								        "Proxy-Authorization:", sizeof("Proxy-Authorization:") - 1) == 0) {
 									while (*p != 0 && *p != '\r' && *p !='\n') p++;
 									smart_str_appendl(&header, s, p - s);
-									smart_str_appendl(&header, "\r\n", sizeof("\r\n")-1);
+									smart_str_appendl(&header, ZEND_STRL("\r\n"));
 									goto finish;
 								} else {
 									while (*p != 0 && *p != '\r' && *p !='\n') p++;
@@ -298,7 +298,7 @@ static php_stream *php_stream_url_wrap_http_ex(php_stream_wrapper *wrapper,
 						        "Proxy-Authorization:", sizeof("Proxy-Authorization:") - 1) == 0) {
 							while (*p != 0 && *p != '\r' && *p !='\n') p++;
 							smart_str_appendl(&header, s, p - s);
-							smart_str_appendl(&header, "\r\n", sizeof("\r\n")-1);
+							smart_str_appendl(&header, ZEND_STRL("\r\n"));
 							goto finish;
 						} else {
 							while (*p != 0 && *p != '\r' && *p !='\n') p++;
@@ -310,7 +310,7 @@ static php_stream *php_stream_url_wrap_http_ex(php_stream_wrapper *wrapper,
 			}
 		}
 finish:
-		smart_str_appendl(&header, "\r\n", sizeof("\r\n")-1);
+		smart_str_appendl(&header, ZEND_STRL("\r\n"));
 
 		if (php_stream_write(stream, ZSTR_VAL(header.s), ZSTR_LEN(header.s)) != ZSTR_LEN(header.s)) {
 			php_stream_wrapper_log_error(wrapper, options, "Cannot connect to HTTPS server through proxy");
@@ -432,7 +432,7 @@ finish:
 			ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(tmpzval), tmpheader) {
 				if (Z_TYPE_P(tmpheader) == IS_STRING) {
 					smart_str_append(&tmpstr, Z_STR_P(tmpheader));
-					smart_str_appendl(&tmpstr, "\r\n", sizeof("\r\n") - 1);
+					smart_str_appendl(&tmpstr, ZEND_STRL("\r\n"));
 				}
 			} ZEND_HASH_FOREACH_END();
 			smart_str_0(&tmpstr);

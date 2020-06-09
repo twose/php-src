@@ -1461,7 +1461,7 @@ tail_call:
 			break;
 		}
 		case ZEND_AST_CONSTANT_CLASS:
-			smart_str_appendl(str, "__CLASS__", sizeof("__CLASS__")-1);
+			smart_str_appendl(str, ZEND_STRL("__CLASS__"));
 			break;
 		case ZEND_AST_ZNODE:
 			/* This AST kind is only used for temporary nodes during compilation */

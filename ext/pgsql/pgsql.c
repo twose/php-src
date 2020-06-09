@@ -6218,7 +6218,7 @@ PHP_PGSQL_API int php_pgsql_insert(PGconn *pg_link, const char *table, zval *var
 				smart_str_appendl(&querystr, buf, snprintf(buf, sizeof(buf), "%F", Z_DVAL_P(val)));
 				break;
 			case IS_NULL:
-				smart_str_appendl(&querystr, "NULL", sizeof("NULL")-1);
+				smart_str_appendl(&querystr, ZEND_STRL("NULL"));
 				break;
 			default:
 				php_error_docref(NULL, E_WARNING, "Expects scaler values. type = %d", Z_TYPE_P(val));
@@ -6381,11 +6381,11 @@ static inline int build_assignment_string(PGconn *pg_link, smart_str *querystr, 
 				break;
 			case IS_DOUBLE: {
 				char buf[256];
-				smart_str_appendl(querystr, buf, MIN(snprintf(buf, sizeof(buf), "%F", Z_DVAL_P(val)), sizeof(buf) - 1));
+				smart_str_appendl(querystr, buf, MIN(snprintf(buf, sizeof(buf), ZEND_STRL("%F")));
 				}
 				break;
 			case IS_NULL:
-				smart_str_appendl(querystr, "NULL", sizeof("NULL")-1);
+				smart_str_appendl(querystr, ZEND_STRL("NULL"));
 				break;
 			default:
 				php_error_docref(NULL, E_WARNING, "Expects scaler values. type=%d", Z_TYPE_P(val));

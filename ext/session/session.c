@@ -1313,7 +1313,7 @@ static int php_session_send_cookie(void) /* {{{ */
 	e_session_name = php_url_encode(PS(session_name), strlen(PS(session_name)));
 	e_id = php_url_encode(ZSTR_VAL(PS(id)), ZSTR_LEN(PS(id)));
 
-	smart_str_appendl(&ncookie, "Set-Cookie: ", sizeof("Set-Cookie: ")-1);
+	smart_str_appendl(&ncookie, ZEND_STRL("Set-Cookie: "));
 	smart_str_appendl(&ncookie, ZSTR_VAL(e_session_name), ZSTR_LEN(e_session_name));
 	smart_str_appendc(&ncookie, '=');
 	smart_str_appendl(&ncookie, ZSTR_VAL(e_id), ZSTR_LEN(e_id));

@@ -22,35 +22,41 @@
 #include "zend_smart_str_public.h"
 
 #define smart_str_appends_ex(dest, src, what) \
-	smart_str_appendl_ex((dest), (src), strlen(src), (what))
+        smart_str_appendl_ex((dest), (src), strlen(src), (what))
+
 #define smart_str_appends(dest, src) \
-	smart_str_appendl((dest), (src), strlen(src))
-#define smart_str_extend(dest, len) \
-	smart_str_extend_ex((dest), (len), 0)
-#define smart_str_appendc(dest, c) \
-	smart_str_appendc_ex((dest), (c), 0)
-#define smart_str_appendl(dest, src, len) \
-	smart_str_appendl_ex((dest), (src), (len), 0)
-#define smart_str_append(dest, src) \
-	smart_str_append_ex((dest), (src), 0)
-#define smart_str_append_smart_str(dest, src) \
-	smart_str_append_smart_str_ex((dest), (src), 0)
+        smart_str_appendl((dest), (src), strlen(src))
+
 #define smart_str_sets(dest, src) \
-	smart_str_setl((dest), (src), strlen(src));
+        smart_str_setl((dest), (src), strlen(src));
+
+#define smart_str_extend(dest, len) \
+        smart_str_extend_ex((dest), (len), 0)
+
+#define smart_str_appendc(dest, c) \
+        smart_str_appendc_ex((dest), (c), 0)
+
+#define smart_str_append(dest, src) \
+        smart_str_append_ex((dest), (src), 0)
+
+#define smart_str_append_smart_str(dest, src) \
+        smart_str_append_smart_str_ex((dest), (src), 0)
+
 #define smart_str_append_long(dest, val) \
-	smart_str_append_long_ex((dest), (val), 0)
+        smart_str_append_long_ex((dest), (val), 0)
+
 #define smart_str_append_unsigned(dest, val) \
-	smart_str_append_unsigned_ex((dest), (val), 0)
+        smart_str_append_unsigned_ex((dest), (val), 0)
+
 #define smart_str_free(dest) \
-	smart_str_free_ex((dest), 0)
+		smart_str_free_ex((dest), 0)
 
 BEGIN_EXTERN_C()
 
 ZEND_API void ZEND_FASTCALL smart_str_erealloc(smart_str *str, size_t len);
 ZEND_API void ZEND_FASTCALL smart_str_realloc(smart_str *str, size_t len);
 ZEND_API void ZEND_FASTCALL smart_str_append_escaped(smart_str *str, const char *s, size_t l);
-ZEND_API void smart_str_append_printf(smart_str *dest, const char *format, ...)
-	ZEND_ATTRIBUTE_FORMAT(printf, 2, 3);
+ZEND_API void smart_str_append_printf(smart_str *dest, const char *format, ...) ZEND_ATTRIBUTE_FORMAT(printf, 2, 3);
 
 END_EXTERN_C()
 
@@ -118,6 +124,10 @@ static zend_always_inline void smart_str_appendl_ex(smart_str *dest, const char 
 	size_t new_len = smart_str_alloc(dest, len, persistent);
 	memcpy(ZSTR_VAL(dest->s) + ZSTR_LEN(dest->s), str, len);
 	ZSTR_LEN(dest->s) = new_len;
+}
+
+static zend_always_inline void smart_str_appendl(smart_str *dest, const char *str, size_t len) {
+	return smart_str_appendl_ex(dest, str, len, 0);
 }
 
 static zend_always_inline void smart_str_append_ex(smart_str *dest, const zend_string *src, zend_bool persistent) {
