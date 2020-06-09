@@ -6381,7 +6381,7 @@ static inline int build_assignment_string(PGconn *pg_link, smart_str *querystr, 
 				break;
 			case IS_DOUBLE: {
 				char buf[256];
-				smart_str_appendl(querystr, buf, MIN(snprintf(buf, sizeof(buf), ZEND_STRL("%F")));
+				smart_str_appendl(querystr, buf, MIN(snprintf(buf, sizeof(buf), "%F", Z_DVAL_P(val)), sizeof(buf) - 1));
 				}
 				break;
 			case IS_NULL:
