@@ -309,8 +309,8 @@ PHPAPI ssize_t _php_stream_read(php_stream *stream, char *buf, size_t count);
 PHPAPI zend_string *php_stream_read_to_str(php_stream *stream, size_t len);
 
 PHPAPI ssize_t _php_stream_write(php_stream *stream, const char *buf, size_t count);
+#define php_stream_write _php_stream_write
 #define php_stream_write_string(stream, str)	_php_stream_write(stream, str, strlen(str))
-#define php_stream_write(stream, buf, count)	_php_stream_write(stream, (buf), (count))
 
 PHPAPI int _php_stream_fill_read_buffer(php_stream *stream, size_t size);
 #define php_stream_fill_read_buffer(stream, size)	_php_stream_fill_read_buffer((stream), (size))

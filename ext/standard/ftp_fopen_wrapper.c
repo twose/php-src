@@ -115,7 +115,7 @@ static int php_stream_ftp_stream_close(php_stream_wrapper *wrapper, php_stream *
 			}
 		}
 
-		php_stream_write_string(controlstream, "QUIT\r\n");
+		php_stream_write(controlstream, ZEND_STRL("QUIT\r\n"));
 		php_stream_close(controlstream);
 		stream->wrapperthis = NULL;
 	}
@@ -172,13 +172,13 @@ static php_stream *php_ftp_fopen_connect(php_stream_wrapper *wrapper, const char
 	if (use_ssl)	{
 
 		/* send the AUTH TLS request name */
-		php_stream_write_string(stream, "AUTH TLS\r\n");
+		php_stream_write(stream, ZEND_STRL("AUTH TLS\r\n"));
 
 		/* get the response */
 		result = GET_FTP_RESULT(stream);
 		if (result != 234) {
 			/* AUTH TLS not supported try AUTH SSL */
-			php_stream_write_string(stream, "AUTH SSL\r\n");
+			php_stream_write(stream, ZEND_STRL("AUTH SSL\r\n"));
 
 			/* get the response */
 			result = GET_FTP_RESULT(stream);
@@ -209,20 +209,20 @@ static php_stream *php_ftp_fopen_connect(php_stream_wrapper *wrapper, const char
 		}
 
 		/* set PBSZ to 0 */
-		php_stream_write_string(stream, "PBSZ 0\r\n");
+		php_stream_write(stream, ZEND_STRL("PBSZ 0\r\n"));
 
 		/* ignore the response */
 		result = GET_FTP_RESULT(stream);
 
 		/* set data connection protection level */
 #if FTPS_ENCRYPT_DATA
-		php_stream_write_string(stream, "PROT P\r\n");
+		php_stream_write(stream, ZEND_STRL("PROT P\r\n"));
 
 		/* get the response */
 		result = GET_FTP_RESULT(stream);
 		use_ssl_on_data = (result >= 200 && result<=299) || reuseid;
 #else
-		php_stream_write_string(stream, "PROT C\r\n");
+		php_stream_write(stream, ZEND_STRL("PROT C\r\n"));
 
 		/* get the response */
 		result = GET_FTP_RESULT(stream);
@@ -248,7 +248,7 @@ static php_stream *php_ftp_fopen_connect(php_stream_wrapper *wrapper, const char
 
 		php_stream_printf(stream, "USER %s\r\n", ZSTR_VAL(resource->user));
 	} else {
-		php_stream_write_string(stream, "USER anonymous\r\n");
+		php_stream_write(stream, ZEND_STRL("USER anonymous\r\n"));
 	}
 
 	/* get the response */
@@ -270,7 +270,7 @@ static php_stream *php_ftp_fopen_connect(php_stream_wrapper *wrapper, const char
 			if (FG(from_address)) {
 				php_stream_printf(stream, "PASS %s\r\n", FG(from_address));
 			} else {
-				php_stream_write_string(stream, "PASS anonymous\r\n");
+				php_stream_write(stream, ZEND_STRL("PASS anonymous\r\n"));
 			}
 		}
 
@@ -326,14 +326,14 @@ static unsigned short php_fopen_do_pasv(php_stream *stream, char *ip, size_t ip_
 
 #ifdef HAVE_IPV6
 	/* We try EPSV first, needed for IPv6 and works on some IPv4 servers */
-	php_stream_write_string(stream, "EPSV\r\n");
+	php_stream_write(stream, ZEND_STRL("EPSV\r\n"));
 	result = GET_FTP_RESULT(stream);
 
 	/* check if we got a 229 response */
 	if (result != 229) {
 #endif
 		/* EPSV failed, let's try PASV */
-		php_stream_write_string(stream, "PASV\r\n");
+		php_stream_write(stream, ZEND_STRL("PASV\r\n"));
 		result = GET_FTP_RESULT(stream);
 
 		/* make sure we got a 227 response */
@@ -467,7 +467,7 @@ php_stream * php_stream_url_wrap_ftp(php_stream_wrapper *wrapper, const char *pa
 	}
 
 	/* set the connection to be binary */
-	php_stream_write_string(stream, "TYPE I\r\n");
+	php_stream_write(stream, ZEND_STRL("TYPE I\r\n"));
 	result = GET_FTP_RESULT(stream);
 	if (result > 299 || result < 200)
 		goto errexit;
@@ -707,7 +707,7 @@ php_stream * php_stream_ftp_opendir(php_stream_wrapper *wrapper, const char *pat
 	}
 
 	/* set the connection to be ascii */
-	php_stream_write_string(stream, "TYPE A\r\n");
+	php_stream_write(stream, ZEND_STRL("TYPE A\r\n"));
 	result = GET_FTP_RESULT(stream);
 	if (result > 299 || result < 200)
 		goto opendir_errexit;
@@ -805,7 +805,7 @@ static int php_stream_ftp_url_stat(php_stream_wrapper *wrapper, const char *url,
 		ssb->sb.st_mode |= S_IFDIR | S_IXUSR | S_IXGRP | S_IXOTH;
 	}
 
-	php_stream_write_string(stream, "TYPE I\r\n"); /* we need this since some servers refuse to accept SIZE command in ASCII mode */
+	php_stream_write(stream, ZEND_STRL("TYPE I\r\n")); /* we need this since some servers refuse to accept SIZE command in ASCII mode */
 
 	result = GET_FTP_RESULT(stream);
 
