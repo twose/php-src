@@ -882,6 +882,13 @@ static inline int ct_eval_func_call(
 			/* pass */
 		} else if (zend_string_equals_literal(name, "serialize")) {
 			/* pass */
+		} else if (zend_string_equals_literal(name, "is_list")) {
+			if (Z_TYPE_P(args[0]) == IS_ARRAY) {
+				ZVAL_BOOL(result, zend_array_is_list(Z_ARRVAL_P(args[0])));
+			} else {
+				ZVAL_FALSE(result);
+			}
+			return SUCCESS;
 		} else {
 			return FAILURE;
 		}
