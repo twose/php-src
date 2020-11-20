@@ -3,6 +3,8 @@ git:
 
 dist: bionic
 language: c
+compiler:
+  - gcc
 os: linux
 addons:
   apt:
@@ -34,69 +36,21 @@ addons:
       - libxpm-dev
       - libxslt1-dev
       - libzip-dev
-
-
-services:
-  - mysql
-  - postgresql
-
-notifications:
-    email:
-       on_failure: change
-    irc:
-      template:
-        - "%{repository}#%{build_number} (%{branch} - %{commit} : %{author}): %{message} -  Change view : %{compare_url} - Build details : %{build_url}"
-      channels:
-        - "irc.efnet.org#php.pecl"
-      on_success: change
-      on_failure: always
-
-cache:
-    apt: true
-    ccache: true
+  coverity_scan:
+    project:
+      name: "twose/php-src"
+      description: "none"
+    notification_email: twose@qq.com
+    build_command_prepend: "ENABLE_ZTS=0 ENABLE_DEBUG=1 CONFIG_ONLY=1 ./travis/compile.sh"
+    build_command: "make -j4"
+    branch_pattern: coverity_scan
 
 env:
     global:
-      - MYSQL_TEST_HOST=127.0.0.1
-      - MYSQL_TEST_USER=travis
-      - PDO_MYSQL_TEST_DSN="mysql:host=127.0.0.1;dbname=test"
-      - PDO_MYSQL_TEST_USER=travis
-      - PDO_MYSQL_TEST_PASS=
-      - PDO_MYSQL_TEST_HOST=127.0.0.1
-      - PDO_PGSQL_TEST_DSN="pgsql:host=localhost port=5432 dbname=test user=postgres password="
-      - REPORT_EXIT_STATUS=1
+      - secure: "RM3kQ7Rque2s4sO0eiu59ow5PiF3IXLACblBm5iQzzS++WCLtQchkwV8ngP7brAtWRyYik/LGf+PRkhaH/eNX68MVJAp1tk8GPPOgNZScuGRuMEp+2BGcGlWuDLUVmBBeAGo1KSowAE0jZYwYQWKAe+87C+5mk3ntuTQMOyrQc3uIiytr1k3NSdrDKfyvYH0Exn7wNHTq9LtN/m6QvP+LyhKBFyPvT6wYOL3H4Z3csYciUuDlGCvpmIKzIM51eOFqw2h/7jRvT/mYU/upBIpDpjSXeOEMFS1GIWZ9LuVxSx95g9V+xiuOJ7sYNsaPYJuriiTEteol9i5IB2ToIGIPdv0NTwgVxyLRgHbkak0Y0+FZhxgZai6TWl9dTg8i0durd5S0XqZ5iT+iie2YITwuYCpowKvnDLlv541j1VpWb44tUZirnBDYFTBTDwZkBWeoAkMG4v6BQcdhkfmloPkzouMOxrHNGl7zxkc6Y+JSnwZEUOiSgrGs5W7rJkAPyP/HlSsGikuLlB16cDBkFn4AuvTqErmtGftEAxxKdkbtMW9hhBcWBo0JKU5afngHeRxdvNh5cae3aO1ZLRceZwkHYBXzcTjRl7b9SGypjmyCBdwmeqe0A9wz7uX6/x5XdqcPqq8gDWhUYerrfMKH8UigNU8JpDZfEiEruLmqivEpqk="
 
-jobs:
-    include:
-        - env: ENABLE_ZTS=0 ENABLE_DEBUG=0
-          arch: amd64
-        - env: ENABLE_ZTS=1 ENABLE_DEBUG=1
-          arch: amd64
-        - env: ENABLE_ZTS=1 ENABLE_DEBUG=1 SKIP_IO_CAPTURE_TESTS=1 ARM64=1
-          arch: arm64
-          if: type = cron
-        - env: ENABLE_ZTS=1 ENABLE_DEBUG=1 SKIP_IO_CAPTURE_TESTS=1 S390X=1
-          arch: s390x
-          if: type = cron
+before_install:
+  - echo -n | openssl s_client -connect https://scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-
 
-before_script:
-    - ccache --version
-    - ccache --zero-stats
-    - export USE_CCACHE=1
-    # Enable IPv6
-    - sudo sh -c 'echo 0 > /proc/sys/net/ipv6/conf/all/disable_ipv6'
-    # Compile PHP
-    - travis_wait ./travis/compile.sh
-    # Setup Extensions
-    - ./travis/setup-mysql.sh
-    - ./travis/setup-pgsql.sh
-
-# Run PHPs run-tests.php
 script:
-    # ARM64 CI reports nproc=32, which is excessive.
-    - if [ -z "$ARM64" ]; then export JOBS=$(nproc); else export JOBS=16; fi
-    - ./sapi/cli/php run-tests.php -P -d extension=`pwd`/modules/zend_test.so $(if [ $ENABLE_DEBUG == 0 ]; then echo "-d opcache.enable_cli=1 -d opcache.protect_memory=1 -d opcache.jit_buffer_size=16M -d zend_extension=`pwd`/modules/opcache.so"; fi) -g "FAIL,XFAIL,BORK,WARN,LEAK,SKIP" --offline --show-diff --show-slow 1000 --set-timeout 120 -j$JOBS
-    - sapi/cli/php -d extension_dir=`pwd`/modules -r 'dl("zend_test");'
-
-after_success:
-    - ccache --show-stats
+  - make -j4
