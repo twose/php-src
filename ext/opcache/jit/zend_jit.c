@@ -116,6 +116,8 @@ static const void *zend_jit_func_trace_counter_handler = NULL;
 static const void *zend_jit_ret_trace_counter_handler = NULL;
 static const void *zend_jit_loop_trace_counter_handler = NULL;
 
+static bool zend_jit_opcode_ignore_list[256];
+
 static void ZEND_FASTCALL zend_runtime_jit(void);
 
 static int zend_jit_trace_op_len(const zend_op *opline);
@@ -4198,7 +4200,8 @@ ZEND_EXT_API int zend_jit_check_support(void)
 	}
 
 	for (i = 0; i <= 256; i++) {
-		if (zend_get_user_opcode_handler(i) != NULL) {
+		if (zend_get_user_opcode_handler(i) != NULL &&
+			!zend_jit_opcode_ignore_list_get(i)) {
 			zend_error(E_WARNING, "JIT is incompatible with third party extensions that setup user opcode handlers. JIT disabled.");
 			JIT_G(enabled) = 0;
 			JIT_G(on) = 0;
@@ -4483,6 +4486,16 @@ ZEND_EXT_API void zend_jit_restart(void)
 
 		zend_jit_protect();
 	}
+}
+
+ZEND_EXT_API bool zend_jit_opcode_ignore_list_get(zend_uchar opcode)
+{
+	return zend_jit_opcode_ignore_list[opcode];
+}
+
+ZEND_EXT_API void zend_jit_opcode_ignore_list_set(zend_uchar opcode, bool value)
+{
+	zend_jit_opcode_ignore_list[opcode] = value;
 }
 
 #endif /* HAVE_JIT */
