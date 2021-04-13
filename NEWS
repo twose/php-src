@@ -57,6 +57,9 @@ PHP                                                                        NEWS
   . Fixed bug #80838 (HTTP wrapper waits for HTTP 1 response after HTTP 101).
     (manuelm)
 
+- Opcache:
+  . Fixed bug #80900 (switch statement behavior inside function). (twosee)
+
 04 Mar 2021, php 7.4.16
 
 - Core:
