@@ -185,6 +185,10 @@ struct _php_stream_wrapper	{
  * Currently for internal use only. */
 #define PHP_STREAM_FLAG_SUPPRESS_ERRORS				0x100
 
+/* Shutdown at the user level to reduce the system calls overhead.
+ * Currently for internal use only and it only affect php_stream_read(). */
+#define PHP_STREAM_FLAG_SHUTDOWN					0x200
+
 #define PHP_STREAM_FLAG_WAS_WRITTEN					0x80000000
 
 struct _php_stream  {

@@ -700,7 +700,7 @@ PHPAPI ssize_t _php_stream_read(php_stream *stream, char *buf, size_t size)
 		}
 
 		/* ignore eof here; the underlying state might have changed */
-		if (size == 0) {
+		if (size == 0 || (stream->flags & PHP_STREAM_FLAG_SHUTDOWN)) {
 			break;
 		}
 

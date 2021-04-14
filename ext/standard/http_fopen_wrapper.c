@@ -955,6 +955,10 @@ out:
 		if (transfer_encoding) {
 			php_stream_filter_append(&stream->readfilters, transfer_encoding);
 		}
+
+		php_stream_fill_read_buffer(stream, file_size);
+
+		stream->flags |= PHP_STREAM_FLAG_SHUTDOWN;
 	}
 
 	return stream;
