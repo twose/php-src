@@ -34,6 +34,7 @@
 #include "zend_cpuinfo.h"
 #include "zend_attributes.h"
 #include "zend_observer.h"
+#include "zend_fiber.h"
 #include "Optimizer/zend_optimizer.h"
 
 static size_t global_map_ptr_last = 0;
@@ -174,6 +175,32 @@ static ZEND_INI_MH(OnSetExceptionStringParamMaxLen) /* {{{ */
 }
 /* }}} */
 
+static ZEND_INI_MH(OnUpdateFiberStackSize) /* {{{ */
+{
+	if (new_value) {
+		// TODO: align
+		EG(fiber_stack_size) = zend_atol(ZSTR_VAL(new_value), ZSTR_LEN(new_value));
+	} else {
+		EG(fiber_stack_size) = ZEND_FIBER_DEFAULT_STACK_SIZE;
+	}
+
+	return SUCCESS;
+}
+/* }}} */
+
+static ZEND_INI_MH(OnUpdateFiberStackPageSize) /* {{{ */
+{
+	if (new_value) {
+		// TODO: align
+		EG(fiber_stack_page_size) = zend_atol(ZSTR_VAL(new_value), ZSTR_LEN(new_value));
+	} else {
+		EG(fiber_stack_page_size) = ZEND_FIBER_DEFAULT_STACK_PAGE_SIZE;
+	}
+
+	return SUCCESS;
+}
+/* }}} */
+
 #if ZEND_DEBUG
 # define SIGNAL_CHECK_DEFAULT "1"
 #else
@@ -192,6 +219,8 @@ ZEND_INI_BEGIN()
 #endif
 	STD_ZEND_INI_BOOLEAN("zend.exception_ignore_args",	"0",	ZEND_INI_ALL,		OnUpdateBool, exception_ignore_args, zend_executor_globals, executor_globals)
 	STD_ZEND_INI_ENTRY("zend.exception_string_param_max_len",	"15",	ZEND_INI_ALL,	OnSetExceptionStringParamMaxLen,	exception_string_param_max_len,		zend_executor_globals,	executor_globals)
+	STD_ZEND_INI_ENTRY("zend.fiber_stack_size",			"2M",	ZEND_INI_ALL,		OnUpdateFiberStackSize,		fiber_stack_size,		zend_executor_globals, 	executor_globals)
+	STD_ZEND_INI_ENTRY("zend.fiber_stack_page_size",	"8K",	ZEND_INI_ALL,		OnUpdateFiberStackPageSize,	fiber_stack_page_size,	zend_executor_globals, 	executor_globals)
 ZEND_INI_END()
 
 ZEND_API size_t zend_vspprintf(char **pbuf, size_t max_len, const char *format, va_list ap) /* {{{ */
@@ -1326,6 +1355,11 @@ ZEND_API ZEND_COLD void zend_error_zstr_at(
 	zend_stack loop_var_stack;
 	zend_stack delayed_oplines_stack;
 	int type = orig_type & E_ALL;
+
+	/* Fatal errors must be handled in {main} */
+	if (type & E_FATAL_ERRORS && EG(current_fiber) != EG(main_fiber)) {
+		// FIXME: zend_error_suspend_fiber(orig_type, error_filename, error_lineno, message);
+	}
 
 	/* If we're executing a function during SCCP, count any warnings that may be emitted,
 	 * but don't perform any other error handling. */

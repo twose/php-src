@@ -61,7 +61,7 @@ END_EXTERN_C()
 
 typedef struct _zend_vm_stack *zend_vm_stack;
 typedef struct _zend_ini_entry zend_ini_entry;
-
+typedef struct _zend_fiber zend_fiber;
 
 struct _zend_compiler_globals {
 	zend_stack loop_var_stack;
@@ -154,14 +154,13 @@ struct _zend_executor_globals {
 
 	HashTable included_files;	/* files already included */
 
-	JMP_BUF *bailout;
-
 	int error_reporting;
-	int exit_status;
 
 	HashTable *function_table;	/* function symbol table */
 	HashTable *class_table;		/* class table */
 	HashTable *zend_constants;	/* constants table */
+
+	JMP_BUF *bailout;
 
 	zval          *vm_stack_top;
 	zval          *vm_stack_end;
@@ -169,9 +168,12 @@ struct _zend_executor_globals {
 	size_t         vm_stack_page_size;
 
 	struct _zend_execute_data *current_execute_data;
-	zend_class_entry *fake_scope; /* used to avoid checks accessing properties */
 
 	uint32_t jit_trace_num; /* Used by tracing JIT to reference the currently running trace */
+
+	int exit_status;
+
+	zend_class_entry *fake_scope; /* used to avoid checks accessing properties */
 
 	zend_long precision;
 
@@ -248,6 +250,14 @@ struct _zend_executor_globals {
 	zend_long exception_string_param_max_len;
 
 	zend_get_gc_buffer get_gc_buffer;
+
+	uint32_t fiber_stack_size; /* default fiber C stack size */
+	uint32_t fiber_stack_page_size; /* default fiber Zend VM stack page size */
+	int64_t last_fiber_id; /* last fiber id */
+	zend_fiber *main_fiber; /* main fiber */
+	zend_fiber *current_fiber; /* active fiber */
+	zend_object *fiber_exception; /* Throw exception to a fiber */
+	HashTable fibers; /* active fibers */
 
 	void *reserved[ZEND_MAX_RESERVED_RESOURCES];
 };

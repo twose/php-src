@@ -33,6 +33,7 @@
 #include "zend_generators.h"
 #include "zend_vm.h"
 #include "zend_float.h"
+#include "zend_fiber.h"
 #include "zend_weakrefs.h"
 #include "zend_inheritance.h"
 #include "zend_observer.h"
@@ -188,6 +189,7 @@ void init_executor(void) /* {{{ */
 	EG(get_gc_buffer).start = EG(get_gc_buffer).end = EG(get_gc_buffer).cur = NULL;
 
 	zend_weakrefs_init();
+	zend_fiber_init();
 
 	EG(active) = 1;
 }
@@ -373,6 +375,7 @@ void shutdown_executor(void) /* {{{ */
 
 	zend_objects_store_free_object_storage(&EG(objects_store), fast_shutdown);
 
+	zend_fiber_shutdown();
 	zend_weakrefs_shutdown();
 
 	zend_try {
