@@ -200,7 +200,7 @@ static ZEND_NORETURN void zend_fiber_trampoline(transfer_t transfer)
 
 	jump_fcontext(context->caller, NULL);
 
-	abort();
+	ZEND_UNREACHABLE();
 }
 
 ZEND_API bool zend_fiber_init_context(zend_fiber_context *context, zend_fiber_coroutine coroutine, size_t stack_size)
