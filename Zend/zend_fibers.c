@@ -73,8 +73,8 @@ typedef struct _transfer_t {
 	void *data;
 } transfer_t;
 
-extern fcontext_t make_fcontext(void *sp, size_t size, void (*fn)(transfer_t));
-extern transfer_t jump_fcontext(fcontext_t to, void *vp);
+fcontext_t make_fcontext(void *sp, size_t size, void (*fn)(transfer_t));
+transfer_t jump_fcontext(fcontext_t to, void *vp);
 
 #define ZEND_FIBER_DEFAULT_PAGE_SIZE 4096
 
